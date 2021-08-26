@@ -1,11 +1,14 @@
 import ChatKitty, {
   Channel,
+  ChatKittyPaginator,
   ChatSession,
   CurrentUser,
   GetChannelsSucceededResult,
   GetCountSucceedResult,
+  GetMessagesSucceededResult,
   GetUsersSucceededResult,
   isDirectChannel,
+  Message,
   StartedChatSessionResult,
   succeeded,
   User,
@@ -26,6 +29,9 @@ interface ChatAppContext {
   channelDisplayName: (channel: Channel) => string;
   channelDisplayPicture: (channel: Channel) => string | undefined;
   channelUnreadMessagesCount: (channel: Channel) => Promise<number>;
+  channelMessages: (
+    channel: Channel
+  ) => Promise<ChatKittyPaginator<Message> | null>;
   startChatSession: (channel: Channel) => void;
   chatSession: ChatSession | null;
   loading: boolean;
@@ -44,6 +50,7 @@ const initialValues: ChatAppContext = {
   channelDisplayName: () => '',
   channelDisplayPicture: () => undefined,
   channelUnreadMessagesCount: () => Promise.prototype,
+  channelMessages: () => Promise.prototype,
   startChatSession: () => {},
   chatSession: null,
   loading: false,
@@ -183,6 +190,18 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
     }
   };
 
+  const channelMessages = async (channel: Channel) => {
+    const getMessages = await kitty.getMessages({
+      channel,
+    });
+
+    if (succeeded<GetMessagesSucceededResult>(getMessages)) {
+      return getMessages.paginator;
+    } else {
+      return null;
+    }
+  };
+
   const logout = async () => {
     await kitty.endSession();
   };
@@ -197,6 +216,7 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
         channelDisplayName,
         channelDisplayPicture,
         channelUnreadMessagesCount,
+        channelMessages,
         startChatSession,
         chatSession,
         loading,

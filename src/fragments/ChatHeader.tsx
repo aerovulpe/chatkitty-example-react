@@ -1,19 +1,19 @@
 import React, { useContext } from 'react';
 
-import { ChatSession } from '../../../chatkitty-js';
+import { Channel } from '../../../chatkitty-js';
 import { ChatAppContext } from '../providers/ChatAppProvider';
 import { FlexRow, Icon, Icons, StyledBox, Title } from '../ui-kit/components';
 
 interface ChatHeaderProps {
-  session: ChatSession;
+  channel: Channel;
 }
 
 const ChatHeader: React.FC<ChatHeaderProps> = ({
-  session,
+  channel,
 }: ChatHeaderProps) => {
   const { channelDisplayName, showView } = useContext(ChatAppContext);
 
-  const properties = session.channel.properties as { description: string };
+  const properties = channel.properties as { description: string };
 
   return (
     <StyledBox px="6" paddingTop="7" bg={['backgrounds.panel', 'transparent']}>
@@ -30,7 +30,7 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({
         </StyledBox>
 
         <Title
-          heading={channelDisplayName(session.channel)}
+          heading={channelDisplayName(channel)}
           label={properties.description}
         ></Title>
       </FlexRow>

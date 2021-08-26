@@ -29,7 +29,7 @@ const Chat: React.FC = () => {
       bg="backgrounds.content"
       borderRight="light"
     >
-      <ChatHeader session={session} />
+      <ChatHeader channel={session.channel} />
     </FlexColumn>
   );
 };
