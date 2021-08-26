@@ -24,8 +24,8 @@ interface ChatAppContext {
   login: (username: string) => void;
   currentUser: CurrentUser | null;
   online: boolean;
-  users: User[];
-  joinedChannels: Channel[];
+  users: () => Promise<ChatKittyPaginator<User> | null>;
+  joinedChannels: () => Promise<ChatKittyPaginator<Channel> | null>;
   channelDisplayName: (channel: Channel) => string;
   channelDisplayPicture: (channel: Channel) => string | undefined;
   channelUnreadMessagesCount: (channel: Channel) => Promise<number>;
@@ -45,8 +45,8 @@ const initialValues: ChatAppContext = {
   login: () => {},
   currentUser: null,
   online: false,
-  users: [],
-  joinedChannels: [],
+  users: () => Promise.prototype,
+  joinedChannels: () => Promise.prototype,
   channelDisplayName: () => '',
   channelDisplayPicture: () => undefined,
   channelUnreadMessagesCount: () => Promise.prototype,
@@ -71,10 +71,6 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
 }: ChatAppContextProviderProps) => {
   const [currentUser, setCurrentUser] = useState(initialValues.currentUser);
   const [online, setOnline] = useState(initialValues.online);
-  const [users, setUsers] = useState(initialValues.users);
-  const [joinedChannels, setJoinedChannels] = useState(
-    initialValues.joinedChannels
-  );
   const [chatSession, setChatSession] = useState(initialValues.chatSession);
   const [loading, setLoading] = useState(initialValues.loading);
   const [layout, setLayout] = useState(initialValues.layout);
@@ -119,29 +115,29 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
 
     await kitty.startSession({ username: username });
 
+    setLoading(false);
+  };
+
+  const users = async () => {
     const getUsers = await kitty.getUsers();
 
     if (succeeded<GetUsersSucceededResult>(getUsers)) {
-      setUsers(getUsers.paginator.items);
+      return getUsers.paginator;
+    } else {
+      return null;
     }
+  };
 
-    kitty.onUserPresenceChanged((user) => {
-      setUsers([...users, user]);
-    });
-
-    const getJoinedChannels = await kitty.getChannels({
+  const joinedChannels = async () => {
+    const getChannels = await kitty.getChannels({
       filter: { joined: true },
     });
 
-    if (succeeded<GetChannelsSucceededResult>(getJoinedChannels)) {
-      setJoinedChannels(getJoinedChannels.paginator.items);
+    if (succeeded<GetChannelsSucceededResult>(getChannels)) {
+      return getChannels.paginator;
+    } else {
+      return null;
     }
-
-    kitty.onChannelJoined((channel) => {
-      setJoinedChannels([...joinedChannels, channel]);
-    });
-
-    setLoading(false);
   };
 
   const channelDisplayName = (channel: Channel): string => {

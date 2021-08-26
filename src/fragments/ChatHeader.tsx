@@ -1,6 +1,6 @@
+import { Channel } from 'chatkitty';
 import React, { useContext } from 'react';
 
-import { Channel } from '../../../chatkitty-js';
 import { ChatAppContext } from '../providers/ChatAppProvider';
 import { FlexRow, Icon, Icons, StyledBox, Title } from '../ui-kit/components';
 

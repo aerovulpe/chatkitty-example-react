@@ -15,7 +15,7 @@ import {
 import { useMediaQuery } from '../ui-kit/hooks';
 
 import CurrentUserStatus from './CurrentUserStatus';
-import JoinedChannels from './JoinedChannels';
+import JoinedChannelList from './JoinedChannelList';
 
 const Menu: React.FC = () => {
   const theme = useContext(ThemeContext);
@@ -57,7 +57,7 @@ const Menu: React.FC = () => {
         </FlexRow>
       </StyledBox>
 
-      <JoinedChannels />
+      <JoinedChannelList />
     </Drawer>
   );
 };

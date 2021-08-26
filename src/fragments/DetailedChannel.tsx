@@ -1,6 +1,6 @@
+import { Channel } from 'chatkitty';
 import React, { useContext, useEffect, useState } from 'react';
 
-import { Channel } from '../../../chatkitty-js';
 import { ChatAppContext } from '../providers/ChatAppProvider';
 import { DetailedChannelView } from '../ui-kit/components/chat/channel/detailed-channel-view';
 

@@ -9,6 +9,7 @@ import {
 } from '../ui-kit/components';
 
 import ChatHeader from './ChatHeader';
+import ChatMessageList from './ChatMessageList';
 
 const Chat: React.FC = () => {
   const { chatSession: session } = useContext(ChatAppContext);
@@ -21,6 +22,8 @@ const Chat: React.FC = () => {
     );
   }
 
+  const channel = session.channel;
+
   return (
     <FlexColumn
       height="100%"
@@ -29,7 +32,8 @@ const Chat: React.FC = () => {
       bg="backgrounds.content"
       borderRight="light"
     >
-      <ChatHeader channel={session.channel} />
+      <ChatHeader channel={channel} />
+      <ChatMessageList channel={channel} />
     </FlexColumn>
   );
 };

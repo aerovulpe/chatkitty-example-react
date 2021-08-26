@@ -3,30 +3,52 @@ import { RefObject, useEffect, useRef, useState } from 'react';
 import { useVisibility } from 'ui-kit/hooks/useVisibility';
 
 const usePaginator = <I>(
-  paginator: ChatKittyPaginator<I>,
-  isEnabled = true,
-  debounce = 500
+  paginator: () => Promise<ChatKittyPaginator<I> | null>,
+  dependencies: unknown[],
+  debounce = 500,
+  isEnabled = true
 ): {
   loading: boolean;
-  results: I[][] | null;
+  items: I[];
   containerRef: RefObject<HTMLDivElement>;
-  endRef: RefObject<HTMLDivElement>;
+  elementRef: RefObject<HTMLDivElement>;
 } => {
   const [loading, setLoading] = useState(false);
-  const [results, setResults] = useState<I[][] | null>(null);
-  const [prev, setPagination] = useState<ChatKittyPaginator<I> | null>(null);
+
+  const [currentPaginator, setCurrentPagination] =
+    useState<ChatKittyPaginator<I> | null>(null);
+
+  const [items, setItems] = useState<I[]>([]);
+
   // refs and intersection observers for infinite scroll
   const containerRef = useRef<HTMLDivElement>(null);
-  const endRef = useRef<HTMLDivElement>(null);
-  // TODO: this needs to be a parameter
-  const atEnd = useVisibility(endRef, containerRef, 0, '0px 0px 500px 0px');
+  const elementRef = useRef<HTMLDivElement>(null);
+
+  console.log('container ref: ', containerRef);
+  console.log('element ref: ', elementRef);
+
+  const atEnd = useVisibility(elementRef, containerRef, 0, '0px 0px 0px 0px');
+
+  console.log('atEnd: ', atEnd);
 
   useEffect(() => {
-    setLoading(false);
-  }, []);
+    setLoading(true);
+
+    paginator().then((p) => {
+      setCurrentPagination(p);
+
+      if (p) {
+        console.log('fetched initial: ', p);
+
+        setItems(p.items);
+      }
+
+      setLoading(false);
+    });
+  }, dependencies);
 
   const shouldUpdate =
-    !loading && (atEnd || prev === null) && paginator.hasNextPage && isEnabled;
+    !loading && atEnd && currentPaginator?.hasNextPage && isEnabled;
 
   // infinite scroll
   useEffect(() => {
@@ -41,21 +63,15 @@ const usePaginator = <I>(
 
         setLoading(true);
 
-        const next = await paginator.nextPage();
+        if (currentPaginator) {
+          const next = await currentPaginator.nextPage();
 
-        const current = next.items;
+          setItems((old) => [...old, ...next.items]);
 
-        if (current.length > 0) {
-          setResults((old) => {
-            if (prev && old) {
-              return [...old, current];
-            } else {
-              return [current];
-            }
-          });
+          console.log('fetched: ', next);
+
+          setCurrentPagination(next);
         }
-
-        setPagination(next);
 
         // enforce a delay between fetching pages
         scheduled = setTimeout(() => {
@@ -69,9 +85,9 @@ const usePaginator = <I>(
         clearTimeout(scheduled);
       }
     };
-  }, [prev, debounce, shouldUpdate]);
+  }, [currentPaginator, shouldUpdate]);
 
-  return { loading, results, containerRef, endRef };
+  return { loading, items, containerRef, elementRef };
 };
 
 export { usePaginator };
