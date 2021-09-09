@@ -28,6 +28,27 @@ const GlobalStyle = createGlobalStyle<{ theme: Theme }>`
     color: inherit;
     text-decoration: none;
   }
+  
+  /* Works on Firefox */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: purple rgba(0, 0, 0, 0);
+  }
+  
+  /* Works on Chrome, Edge, and Safari */
+  *::-webkit-scrollbar {
+    width: 9px;
+  }
+  
+  *::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0);
+  }
+  
+  *::-webkit-scrollbar-thumb {
+    background-color: purple;
+    border-radius: 15px;
+    border: 3px solid rgba(0, 0, 0, 0);
+  }
 `;
 
 export default GlobalStyle;

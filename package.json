@@ -13,9 +13,11 @@
     "prepare": "husky install"
   },
   "dependencies": {
+    "@giphy/js-types": "^4.0.3",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
+    "@types/emoji-mart": "^3.0.5",
     "@types/invariant": "^2.2.35",
     "@types/jest": "^26.0.15",
     "@types/moment": "^2.13.0",
@@ -25,6 +27,7 @@
     "@types/styled-components": "^5.1.12",
     "@types/styled-system": "^5.1.13",
     "chatkitty": "^1.47.0",
+    "emoji-mart": "^3.0.1",
     "framer-motion": "^4.1.17",
     "invariant": "^2.2.4",
     "moment": "^2.29.1",

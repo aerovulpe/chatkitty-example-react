@@ -15,7 +15,14 @@ import ChatKitty, {
 } from 'chatkitty';
 import React, { ReactElement, useEffect, useState } from 'react';
 
+import { SentMessageResult } from '../../../chatkitty-js/src';
 import ChatKittyConfiguration from '../configuration/chatkitty';
+import {
+  isTextMessageDraft,
+  MessageDraft,
+  MessageDraftType,
+  TextMessageDraft,
+} from '../models/message-draft';
 import { LayoutState, View } from '../navigation';
 
 const kitty = ChatKitty.getInstance(ChatKittyConfiguration.API_KEY);
@@ -34,6 +41,10 @@ interface ChatAppContext {
   ) => Promise<ChatKittyPaginator<Message> | null>;
   startChatSession: (channel: Channel) => void;
   chatSession: ChatSession | null;
+  messageDraft: TextMessageDraft;
+  updateMessageDraft: (draft: TextMessageDraft) => void;
+  discardMessageDraft: () => void;
+  sendMessageDraft: (draft: MessageDraft) => void;
   loading: boolean;
   layout: LayoutState;
   showView: (view: View) => void;
@@ -53,6 +64,13 @@ const initialValues: ChatAppContext = {
   channelMessages: () => Promise.prototype,
   startChatSession: () => {},
   chatSession: null,
+  messageDraft: {
+    type: MessageDraftType.Text,
+    text: '',
+  },
+  updateMessageDraft: () => {},
+  discardMessageDraft: () => {},
+  sendMessageDraft: () => {},
   loading: false,
   layout: { menu: false, chat: false },
   showView: () => {},
@@ -72,6 +90,7 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
   const [currentUser, setCurrentUser] = useState(initialValues.currentUser);
   const [online, setOnline] = useState(initialValues.online);
   const [chatSession, setChatSession] = useState(initialValues.chatSession);
+  const [messageDraft, setMessageDraft] = useState(initialValues.messageDraft);
   const [loading, setLoading] = useState(initialValues.loading);
   const [layout, setLayout] = useState(initialValues.layout);
 
@@ -119,22 +138,22 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
   };
 
   const users = async () => {
-    const getUsers = await kitty.getUsers();
+    const result = await kitty.getUsers();
 
-    if (succeeded<GetUsersSucceededResult>(getUsers)) {
-      return getUsers.paginator;
+    if (succeeded<GetUsersSucceededResult>(result)) {
+      return result.paginator;
     } else {
       return null;
     }
   };
 
   const joinedChannels = async () => {
-    const getChannels = await kitty.getChannels({
+    const result = await kitty.getChannels({
       filter: { joined: true },
     });
 
-    if (succeeded<GetChannelsSucceededResult>(getChannels)) {
-      return getChannels.paginator;
+    if (succeeded<GetChannelsSucceededResult>(result)) {
+      return result.paginator;
     } else {
       return null;
     }
@@ -164,10 +183,10 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
   const startChatSession = (channel: Channel): void => {
     chatSession?.end();
 
-    const startChatSession = kitty.startChatSession({ channel });
+    const result = kitty.startChatSession({ channel });
 
-    if (succeeded<StartedChatSessionResult>(startChatSession)) {
-      setChatSession(startChatSession.session);
+    if (succeeded<StartedChatSessionResult>(result)) {
+      setChatSession(result.session);
 
       showView('Chat');
       hideView('Menu');
@@ -175,26 +194,57 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
   };
 
   const channelUnreadMessagesCount = async (channel: Channel) => {
-    const getUnreadMessagesCount = await kitty.getUnreadMessagesCount({
+    const result = await kitty.getUnreadMessagesCount({
       channel,
     });
 
-    if (succeeded<GetCountSucceedResult>(getUnreadMessagesCount)) {
-      return getUnreadMessagesCount.count;
+    if (succeeded<GetCountSucceedResult>(result)) {
+      return result.count;
     } else {
       return 0;
     }
   };
 
   const channelMessages = async (channel: Channel) => {
-    const getMessages = await kitty.getMessages({
+    const result = await kitty.getMessages({
       channel,
     });
 
-    if (succeeded<GetMessagesSucceededResult>(getMessages)) {
-      return getMessages.paginator;
+    if (succeeded<GetMessagesSucceededResult>(result)) {
+      return result.paginator;
     } else {
       return null;
+    }
+  };
+
+  const updateMessageDraft = async (draft: TextMessageDraft) => {
+    if (chatSession) {
+      const channel = chatSession.channel;
+
+      await kitty.sendKeystrokes({ channel, keys: draft.text });
+
+      setMessageDraft(draft);
+    }
+  };
+
+  const discardMessageDraft = () => {
+    setMessageDraft(initialValues.messageDraft);
+  };
+
+  const sendMessageDraft = async (draft: MessageDraft) => {
+    if (!chatSession) {
+      return;
+    }
+
+    const channel = chatSession.channel;
+
+    if (isTextMessageDraft(draft)) {
+      await kitty.sendMessage({
+        channel: channel,
+        body: draft.text,
+      });
+
+      discardMessageDraft();
     }
   };
 
@@ -214,6 +264,10 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
         channelUnreadMessagesCount,
         channelMessages,
         startChatSession,
+        messageDraft,
+        updateMessageDraft,
+        discardMessageDraft,
+        sendMessageDraft,
         chatSession,
         loading,
         layout,

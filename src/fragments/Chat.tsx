@@ -9,6 +9,7 @@ import {
 } from '../ui-kit/components';
 
 import ChatHeader from './ChatHeader';
+import ChatMessageInput from './ChatMessageInput';
 import ChatMessageList from './ChatMessageList';
 
 const Chat: React.FC = () => {
@@ -34,6 +35,7 @@ const Chat: React.FC = () => {
     >
       <ChatHeader channel={channel} />
       <ChatMessageList channel={channel} />
+      <ChatMessageInput channel={channel} />
     </FlexColumn>
   );
 };

@@ -11,7 +11,7 @@ const usePaginator = <I>(
   loading: boolean;
   items: I[];
   containerRef: RefObject<HTMLDivElement>;
-  elementRef: RefObject<HTMLDivElement>;
+  boundaryRef: RefObject<HTMLDivElement>;
 } => {
   const [loading, setLoading] = useState(false);
 
@@ -22,12 +22,12 @@ const usePaginator = <I>(
 
   // refs and intersection observers for infinite scroll
   const containerRef = useRef<HTMLDivElement>(null);
-  const elementRef = useRef<HTMLDivElement>(null);
+  const boundaryRef = useRef<HTMLDivElement>(null);
 
   console.log('container ref: ', containerRef);
-  console.log('element ref: ', elementRef);
+  console.log('element ref: ', boundaryRef);
 
-  const atEnd = useVisibility(elementRef, containerRef, 0, '0px 0px 0px 0px');
+  const atEnd = useVisibility(boundaryRef, containerRef, 0, '0px 0px 0px 0px');
 
   console.log('atEnd: ', atEnd);
 
@@ -87,7 +87,7 @@ const usePaginator = <I>(
     };
   }, [currentPaginator, shouldUpdate]);
 
-  return { loading, items, containerRef, elementRef };
+  return { loading, items, containerRef, boundaryRef };
 };
 
 export { usePaginator };

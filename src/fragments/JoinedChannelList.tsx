@@ -22,7 +22,7 @@ const JoinedChannelList: React.FC = () => {
 
   const {
     containerRef,
-    elementRef,
+    boundaryRef,
     items: channels,
   } = usePaginator(() => joinedChannels(), [currentUser]);
 
@@ -45,7 +45,7 @@ const JoinedChannelList: React.FC = () => {
         {channels.map((channel) => (
           <DetailedChannel key={channel.id} channel={channel} />
         ))}
-        <div ref={elementRef} />
+        <div ref={boundaryRef} />
       </ScrollView>
     </>
   );

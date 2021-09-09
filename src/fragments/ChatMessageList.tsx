@@ -1,5 +1,5 @@
 import { Channel, isUserMessage } from 'chatkitty';
-import React, { UIEventHandler, useContext } from 'react';
+import React, { useContext, useEffect, useRef } from 'react';
 import { ThemeContext } from 'styled-components';
 
 import { ChatAppContext } from '../providers/ChatAppProvider';
@@ -15,8 +15,6 @@ interface ChatMessageListProps {
   channel: Channel;
 }
 
-type ScrollElement = { scrollTop: number } & Element;
-
 const ChatMessageList: React.FC<ChatMessageListProps> = ({
   channel,
 }: ChatMessageListProps) => {
@@ -26,25 +24,29 @@ const ChatMessageList: React.FC<ChatMessageListProps> = ({
 
   const {
     containerRef,
-    elementRef,
+    boundaryRef,
     items: messages,
   } = usePaginator(() => channelMessages(channel), [channel]);
 
-  const handleScroll: UIEventHandler<ScrollElement> = (e) => {
-    const scrollPosition = (e.target as ScrollElement).scrollTop;
+  const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
-    if (scrollPosition !== 0) {
-      // TODO
-    }
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  return (
-    <ScrollView ref={containerRef} onScroll={handleScroll}>
-      <FlexColumn minHeight="100%" flexGrow={1} paddingBottom="1">
-        {/* This moves the list of messages to the bottom, since there's a bug with flex-end scroll */}
-        <FlexColumn flex="1 1 auto"></FlexColumn>
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
 
-        <div ref={elementRef} />
+  return (
+    <ScrollView ref={containerRef}>
+      <FlexColumn
+        minHeight="100%"
+        flexGrow={1}
+        paddingBottom="1"
+        flexDirection="column-reverse"
+      >
+        <div ref={messagesEndRef} />
         {messages.map((message) => (
           <MessageListItem
             message={message}
@@ -63,6 +65,9 @@ const ChatMessageList: React.FC<ChatMessageListProps> = ({
             }
           />
         ))}
+        <div ref={boundaryRef} />
+        {/* This moves the list of messages to the bottom, since there's a bug with flex-end scroll */}
+        <FlexColumn flex="1 1 auto"></FlexColumn>
       </FlexColumn>
     </ScrollView>
   );
