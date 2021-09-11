@@ -11,7 +11,7 @@ interface ChatHeaderProps {
 const ChatHeader: React.FC<ChatHeaderProps> = ({
   channel,
 }: ChatHeaderProps) => {
-  const { channelDisplayName, showView } = useContext(ChatAppContext);
+  const { channelDisplayName, showMenu } = useContext(ChatAppContext);
 
   const properties = channel.properties as { description: string };
 
@@ -22,7 +22,7 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({
           <Icon
             icon={Icons.Back}
             onClick={() => {
-              showView('Menu');
+              showMenu();
             }}
             title="Back"
             clickable

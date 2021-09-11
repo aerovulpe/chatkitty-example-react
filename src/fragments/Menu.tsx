@@ -15,13 +15,13 @@ import {
 import { useMediaQuery } from '../ui-kit/hooks';
 
 import CurrentUserStatus from './CurrentUserStatus';
-import JoinedChannelList from './JoinedChannelList';
+import MyChannels from './MyChannels';
 
 const Menu: React.FC = () => {
   const theme = useContext(ThemeContext);
   const isMedium = useMediaQuery(theme.mediaQueries.medium);
 
-  const { layout, hideView } = useContext(ChatAppContext);
+  const { layout, hideMenu } = useContext(ChatAppContext);
 
   return (
     <Drawer
@@ -35,7 +35,7 @@ const Menu: React.FC = () => {
         display={['block', 'none']}
       >
         <Icon
-          onClick={() => hideView('Menu')}
+          onClick={() => hideMenu()}
           icon={Icons.Cross}
           title="Close channels"
           color={theme.colors.onPrimary}
@@ -57,7 +57,7 @@ const Menu: React.FC = () => {
         </FlexRow>
       </StyledBox>
 
-      <JoinedChannelList />
+      <MyChannels />
     </Drawer>
   );
 };

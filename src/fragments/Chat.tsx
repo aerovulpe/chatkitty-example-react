@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 
 import { ChatAppContext } from '../providers/ChatAppProvider';
 import {
@@ -7,15 +7,17 @@ import {
   HeadingSizes,
   StyledBox,
 } from '../ui-kit/components';
+import { usePaginator } from '../ui-kit/hooks';
 
 import ChatHeader from './ChatHeader';
 import ChatMessageInput from './ChatMessageInput';
-import ChatMessageList from './ChatMessageList';
+import ChatMessages from './ChatMessages';
 
 const Chat: React.FC = () => {
-  const { chatSession: session } = useContext(ChatAppContext);
+  const { channel, channelMessages, startChatSession } =
+    useContext(ChatAppContext);
 
-  if (!session) {
+  if (!channel) {
     return (
       <StyledBox margin="auto">
         <Heading size={HeadingSizes.HUGE}>Select channel</Heading>
@@ -23,7 +25,20 @@ const Chat: React.FC = () => {
     );
   }
 
-  const channel = session.channel;
+  const {
+    items: messages,
+    prepend,
+    containerRef,
+    boundaryRef,
+  } = usePaginator(() => channelMessages(channel), [channel]);
+
+  useEffect(() => {
+    const session = startChatSession(channel, (message) => {
+      prepend([message]);
+    });
+
+    return session?.end;
+  }, [channel]);
 
   return (
     <FlexColumn
@@ -34,7 +49,11 @@ const Chat: React.FC = () => {
       borderRight="light"
     >
       <ChatHeader channel={channel} />
-      <ChatMessageList channel={channel} />
+      <ChatMessages
+        messages={messages}
+        containerRef={containerRef}
+        boundaryRef={boundaryRef}
+      />
       <ChatMessageInput channel={channel} />
     </FlexColumn>
   );

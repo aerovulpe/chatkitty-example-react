@@ -16,6 +16,7 @@ import { ReactComponent as Send } from 'ui-kit/svg/send.svg';
 interface IconWrapperProps {
   /** Show pointer cursor on hover */
   clickable?: boolean;
+  hidden?: boolean;
 }
 
 export enum Icons {
@@ -60,7 +61,7 @@ const Wrapper = Styled.object<IconWrapperProps>`
 
   svg {
     // Block display is needed to remove whitespace underneath inline elements
-    display: block;
+    display: ${(p) => (p.hidden ? 'none' : 'block')};
     ${color}
   }
 `;
@@ -74,13 +75,14 @@ const Wrapper = Styled.object<IconWrapperProps>`
 export const Icon: React.FC<IconProps> = ({
   icon,
   clickable,
+  hidden,
   color,
   ...rest
 }: IconProps) => {
   const IconFile = IconComponents[icon];
 
   return (
-    <Wrapper {...{ color, clickable }}>
+    <Wrapper {...{ color, clickable, hidden }}>
       <IconFile {...rest} />
     </Wrapper>
   );

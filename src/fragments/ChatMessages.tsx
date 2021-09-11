@@ -1,32 +1,26 @@
-import { Channel, isUserMessage } from 'chatkitty';
-import React, { useContext, useEffect, useRef } from 'react';
+import { isUserMessage, Message } from 'chatkitty';
+import React, { RefObject, useContext, useEffect, useRef } from 'react';
 import { ThemeContext } from 'styled-components';
 
-import { ChatAppContext } from '../providers/ChatAppProvider';
 import { FlexColumn, ScrollView } from '../ui-kit/components';
 import { Avatar, AvatarVariants } from '../ui-kit/components/chat';
 import { ImageAvatar } from '../ui-kit/components/chat/avatar/image-avatar';
-import { usePaginator } from '../ui-kit/hooks/usePaginator';
 import { getUniqueColor } from '../ui-kit/utilities';
 
 import MessageListItem from './MessageListItem';
 
-interface ChatMessageListProps {
-  channel: Channel;
+interface ChatMessagesProps {
+  messages: Message[];
+  containerRef: RefObject<HTMLDivElement>;
+  boundaryRef: RefObject<HTMLDivElement>;
 }
 
-const ChatMessageList: React.FC<ChatMessageListProps> = ({
-  channel,
-}: ChatMessageListProps) => {
+const ChatMessages: React.FC<ChatMessagesProps> = ({
+  messages,
+  containerRef,
+  boundaryRef,
+}: ChatMessagesProps) => {
   const theme = useContext(ThemeContext);
-
-  const { channelMessages } = useContext(ChatAppContext);
-
-  const {
-    containerRef,
-    boundaryRef,
-    items: messages,
-  } = usePaginator(() => channelMessages(channel), [channel]);
 
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
@@ -73,4 +67,4 @@ const ChatMessageList: React.FC<ChatMessageListProps> = ({
   );
 };
 
-export default ChatMessageList;
+export default ChatMessages;

@@ -13,7 +13,7 @@ interface DetailedChannelViewProps {
   selected: boolean;
   id: number;
   name: string;
-  displayPicture?: string;
+  displayPicture: string | null;
   unreadMessageCount: number;
   onClick: () => void;
   onLeave: () => void;
@@ -68,17 +68,16 @@ const DetailedChannelView: React.FC<DetailedChannelViewProps> = ({
         }}
       ></Title>
 
-      {(isHovering || isTouch) && (
-        <Icon
-          icon={Icons.Leave}
-          color="onPrimary"
-          title="Leave Channel"
-          onClick={(e) => {
-            e.stopPropagation();
-            onLeave();
-          }}
-        />
-      )}
+      <Icon
+        icon={Icons.Leave}
+        color="onPrimary"
+        title="Leave Channel"
+        hidden={!(isHovering || isTouch)}
+        onClick={(e) => {
+          e.stopPropagation();
+          onLeave();
+        }}
+      />
     </ListItem>
   );
 };

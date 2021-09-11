@@ -34,21 +34,25 @@ interface ChatAppContext {
   users: () => Promise<ChatKittyPaginator<User> | null>;
   joinedChannels: () => Promise<ChatKittyPaginator<Channel> | null>;
   channelDisplayName: (channel: Channel) => string;
-  channelDisplayPicture: (channel: Channel) => string | undefined;
+  channelDisplayPicture: (channel: Channel) => string | null;
   channelUnreadMessagesCount: (channel: Channel) => Promise<number>;
   channelMessages: (
     channel: Channel
   ) => Promise<ChatKittyPaginator<Message> | null>;
-  startChatSession: (channel: Channel) => void;
-  chatSession: ChatSession | null;
+  startChatSession: (
+    channel: Channel,
+    onReceivedMessage: (message: Message) => void
+  ) => ChatSession | null;
+  channel: Channel | null;
   messageDraft: TextMessageDraft;
   updateMessageDraft: (draft: TextMessageDraft) => void;
   discardMessageDraft: () => void;
   sendMessageDraft: (draft: MessageDraft) => void;
   loading: boolean;
+  showMenu: () => void;
+  hideMenu: () => void;
+  showChannel: (channel: Channel) => void;
   layout: LayoutState;
-  showView: (view: View) => void;
-  hideView: (view: View) => void;
   logout: () => void;
 }
 
@@ -59,11 +63,11 @@ const initialValues: ChatAppContext = {
   users: () => Promise.prototype,
   joinedChannels: () => Promise.prototype,
   channelDisplayName: () => '',
-  channelDisplayPicture: () => undefined,
+  channelDisplayPicture: () => null,
   channelUnreadMessagesCount: () => Promise.prototype,
   channelMessages: () => Promise.prototype,
-  startChatSession: () => {},
-  chatSession: null,
+  startChatSession: () => ChatSession.prototype,
+  channel: null,
   messageDraft: {
     type: MessageDraftType.Text,
     text: '',
@@ -72,9 +76,10 @@ const initialValues: ChatAppContext = {
   discardMessageDraft: () => {},
   sendMessageDraft: () => {},
   loading: false,
+  showMenu: () => {},
+  hideMenu: () => {},
+  showChannel: () => {},
   layout: { menu: false, chat: false },
-  showView: () => {},
-  hideView: () => {},
   logout: () => {},
 };
 
@@ -89,7 +94,7 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
 }: ChatAppContextProviderProps) => {
   const [currentUser, setCurrentUser] = useState(initialValues.currentUser);
   const [online, setOnline] = useState(initialValues.online);
-  const [chatSession, setChatSession] = useState(initialValues.chatSession);
+  const [channel, setChannel] = useState(initialValues.channel);
   const [messageDraft, setMessageDraft] = useState(initialValues.messageDraft);
   const [loading, setLoading] = useState(initialValues.loading);
   const [layout, setLayout] = useState(initialValues.layout);
@@ -113,6 +118,22 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
     views.delete(view);
 
     setLayout(getLayout());
+  };
+
+  const showMenu = () => {
+    showView('Menu');
+  };
+
+  const hideMenu = () => {
+    hideView('Menu');
+  };
+
+  const showChannel = (channel: Channel) => {
+    hideView('Menu');
+
+    setChannel(channel);
+
+    showView('Chat');
   };
 
   useEffect(() => {
@@ -142,9 +163,9 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
 
     if (succeeded<GetUsersSucceededResult>(result)) {
       return result.paginator;
-    } else {
-      return null;
     }
+
+    return null;
   };
 
   const joinedChannels = async () => {
@@ -154,9 +175,9 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
 
     if (succeeded<GetChannelsSucceededResult>(result)) {
       return result.paginator;
-    } else {
-      return null;
     }
+
+    return null;
   };
 
   const channelDisplayName = (channel: Channel): string => {
@@ -165,32 +186,32 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
         .filter((member) => member.id !== currentUser?.id)
         .map((member) => member.displayName)
         .join(', ');
-    } else {
-      return channel.name;
     }
+
+    return channel.name;
   };
 
-  const channelDisplayPicture = (channel: Channel): string | undefined => {
+  const channelDisplayPicture = (channel: Channel): string | null => {
     if (isDirectChannel(channel) && channel.members.length === 2) {
       return channel.members
         .filter((member) => member.id !== currentUser?.id)
         .map((member) => member.displayPictureUrl)[0];
-    } else {
-      return undefined;
     }
+
+    return null;
   };
 
-  const startChatSession = (channel: Channel): void => {
-    chatSession?.end();
-
-    const result = kitty.startChatSession({ channel });
+  const startChatSession = (
+    channel: Channel,
+    onReceivedMessage: (message: Message) => void
+  ): ChatSession | null => {
+    const result = kitty.startChatSession({ channel, onReceivedMessage });
 
     if (succeeded<StartedChatSessionResult>(result)) {
-      setChatSession(result.session);
-
-      showView('Chat');
-      hideView('Menu');
+      return result.session;
     }
+
+    return null;
   };
 
   const channelUnreadMessagesCount = async (channel: Channel) => {
@@ -200,9 +221,9 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
 
     if (succeeded<GetCountSucceedResult>(result)) {
       return result.count;
-    } else {
-      return 0;
     }
+
+    return 0;
   };
 
   const channelMessages = async (channel: Channel) => {
@@ -212,19 +233,19 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
 
     if (succeeded<GetMessagesSucceededResult>(result)) {
       return result.paginator;
-    } else {
-      return null;
     }
+
+    return null;
   };
 
   const updateMessageDraft = async (draft: TextMessageDraft) => {
-    if (chatSession) {
-      const channel = chatSession.channel;
-
-      await kitty.sendKeystrokes({ channel, keys: draft.text });
-
-      setMessageDraft(draft);
+    if (!channel) {
+      return;
     }
+
+    await kitty.sendKeystrokes({ channel, keys: draft.text });
+
+    setMessageDraft(draft);
   };
 
   const discardMessageDraft = () => {
@@ -232,11 +253,9 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
   };
 
   const sendMessageDraft = async (draft: MessageDraft) => {
-    if (!chatSession) {
+    if (!channel) {
       return;
     }
-
-    const channel = chatSession.channel;
 
     if (isTextMessageDraft(draft)) {
       await kitty.sendMessage({
@@ -255,6 +274,9 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
   return (
     <ChatAppContext.Provider
       value={{
+        showMenu,
+        hideMenu,
+        showChannel,
         currentUser,
         online,
         users,
@@ -268,11 +290,9 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
         updateMessageDraft,
         discardMessageDraft,
         sendMessageDraft,
-        chatSession,
+        channel,
         loading,
         layout,
-        showView,
-        hideView,
         login,
         logout,
       }}

@@ -12,11 +12,11 @@ const DetailedChannel: React.FC<DetailedChannelViewProps> = ({
   channel,
 }: DetailedChannelViewProps) => {
   const {
-    chatSession,
+    channel: selectedChannel,
     channelDisplayName,
     channelDisplayPicture,
     channelUnreadMessagesCount,
-    startChatSession,
+    showChannel,
   } = useContext(ChatAppContext);
 
   const [unreadMessagesCount, setUnreadMessagesCount] = useState(0);
@@ -35,11 +35,11 @@ const DetailedChannel: React.FC<DetailedChannelViewProps> = ({
       onLeave={() => {
         // TODO
       }}
-      selected={channel.id === chatSession?.channel.id}
+      selected={channel.id === selectedChannel?.id}
       key={channel.id}
       unreadMessageCount={unreadMessagesCount}
-      onClick={() => startChatSession(channel)}
-    ></DetailedChannelView>
+      onClick={() => showChannel(channel)}
+    />
   );
 };
 

@@ -13,7 +13,7 @@ import { usePaginator } from '../ui-kit/hooks/usePaginator';
 
 import DetailedChannel from './DetailedChannel';
 
-const JoinedChannelList: React.FC = () => {
+const MyChannels: React.FC = () => {
   const { joinedChannels, loading, currentUser } = useContext(ChatAppContext);
 
   if (loading) {
@@ -51,4 +51,4 @@ const JoinedChannelList: React.FC = () => {
   );
 };
 
-export default JoinedChannelList;
+export default MyChannels;

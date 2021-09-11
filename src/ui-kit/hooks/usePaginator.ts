@@ -10,6 +10,8 @@ const usePaginator = <I>(
 ): {
   loading: boolean;
   items: I[];
+  prepend: (newItems: I[]) => void;
+  append: (newItems: I[]) => void;
   containerRef: RefObject<HTMLDivElement>;
   boundaryRef: RefObject<HTMLDivElement>;
 } => {
@@ -24,12 +26,7 @@ const usePaginator = <I>(
   const containerRef = useRef<HTMLDivElement>(null);
   const boundaryRef = useRef<HTMLDivElement>(null);
 
-  console.log('container ref: ', containerRef);
-  console.log('element ref: ', boundaryRef);
-
   const atEnd = useVisibility(boundaryRef, containerRef, 0, '0px 0px 0px 0px');
-
-  console.log('atEnd: ', atEnd);
 
   useEffect(() => {
     setLoading(true);
@@ -38,8 +35,6 @@ const usePaginator = <I>(
       setCurrentPagination(p);
 
       if (p) {
-        console.log('fetched initial: ', p);
-
         setItems(p.items);
       }
 
@@ -68,8 +63,6 @@ const usePaginator = <I>(
 
           setItems((old) => [...old, ...next.items]);
 
-          console.log('fetched: ', next);
-
           setCurrentPagination(next);
         }
 
@@ -87,7 +80,15 @@ const usePaginator = <I>(
     };
   }, [currentPaginator, shouldUpdate]);
 
-  return { loading, items, containerRef, boundaryRef };
+  const prepend = (newItems: I[]) => {
+    setItems((current) => [...newItems, ...current]);
+  };
+
+  const append = (newItems: I[]) => {
+    setItems((current) => [...current, ...newItems]);
+  };
+
+  return { loading, items, prepend, append, containerRef, boundaryRef };
 };
 
 export { usePaginator };
