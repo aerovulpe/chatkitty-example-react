@@ -2,13 +2,13 @@ import { Channel } from 'chatkitty';
 import React, { useContext, useEffect, useState } from 'react';
 
 import { ChatAppContext } from '../providers/ChatAppProvider';
-import { DetailedChannelView } from '../ui-kit/components/chat/channel/detailed-channel-view';
+import { JoinedChannelListItemView } from '../ui-kit/components/chat/channel/joined-channel-list-item-view';
 
 interface DetailedChannelViewProps {
   channel: Channel;
 }
 
-const DetailedChannel: React.FC<DetailedChannelViewProps> = ({
+const MyChannelListItem: React.FC<DetailedChannelViewProps> = ({
   channel,
 }: DetailedChannelViewProps) => {
   const {
@@ -28,7 +28,7 @@ const DetailedChannel: React.FC<DetailedChannelViewProps> = ({
   }, [channel]);
 
   return (
-    <DetailedChannelView
+    <JoinedChannelListItemView
       id={channel.id}
       name={channelDisplayName(channel)}
       displayPicture={channelDisplayPicture(channel)}
@@ -43,4 +43,4 @@ const DetailedChannel: React.FC<DetailedChannelViewProps> = ({
   );
 };
 
-export default DetailedChannel;
+export default MyChannelListItem;

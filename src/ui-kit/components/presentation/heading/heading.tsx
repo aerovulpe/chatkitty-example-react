@@ -15,7 +15,7 @@ export interface HeadingProps extends TypographyProps {
   variant?: HeadingVariants | false;
   /** Specify a Heading size */
   size?: HeadingSizes | false;
-  bold?: false;
+  bold?: boolean;
 }
 
 const InverseHeading = css`

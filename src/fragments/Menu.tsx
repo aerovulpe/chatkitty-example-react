@@ -45,7 +45,11 @@ const Menu: React.FC = () => {
 
       <StyledBox padding={6}>
         <FlexRow>
-          <Icon icon={Icons.Logo} title="PubNub" />
+          <Icon
+            icon={Icons.Logo}
+            title="ChatKitty"
+            style={{ height: 61, width: 61 }}
+          />
           <StyledBox paddingLeft={4}>
             <FlexColumn minHeight={1}>
               <Heading variant={HeadingVariants.INVERSE}>

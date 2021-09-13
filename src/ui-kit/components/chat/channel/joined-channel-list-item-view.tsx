@@ -9,7 +9,7 @@ import { Icon, Icons, LabelVariants, Title } from '../../presentation';
 import { Avatar } from '../avatar/avatar';
 import { ImageAvatar } from '../avatar/image-avatar';
 
-interface DetailedChannelViewProps {
+interface JoinedChannelListItemViewProps {
   selected: boolean;
   id: number;
   name: string;
@@ -22,7 +22,7 @@ interface DetailedChannelViewProps {
 /**
  * Show a single joined channel
  */
-const DetailedChannelView: React.FC<DetailedChannelViewProps> = ({
+const JoinedChannelListItemView: React.FC<JoinedChannelListItemViewProps> = ({
   selected,
   id,
   name,
@@ -30,7 +30,7 @@ const DetailedChannelView: React.FC<DetailedChannelViewProps> = ({
   onClick,
   onLeave,
   unreadMessageCount,
-}: DetailedChannelViewProps) => {
+}: JoinedChannelListItemViewProps) => {
   const [isHovering, hoverProps] = useHover({ mouseEnterDelayMS: 0 });
   const theme = useContext(ThemeContext);
   const isTouch = useMediaQuery(theme.mediaQueries.touch);
@@ -82,4 +82,4 @@ const DetailedChannelView: React.FC<DetailedChannelViewProps> = ({
   );
 };
 
-export { DetailedChannelView };
+export { JoinedChannelListItemView };

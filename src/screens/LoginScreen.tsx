@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { ThemeContext } from 'styled-components';
 import {
   Button,
@@ -26,6 +26,10 @@ const LoginScreen: React.FC = () => {
   const { login, loading } = useContext(ChatAppContext);
 
   const [username, setUsername] = useState('');
+
+  useEffect(() => {
+    login(username);
+  }, []);
 
   return (
     <FlexColumn

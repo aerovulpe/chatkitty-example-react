@@ -30,12 +30,13 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({
         </StyledBox>
 
         <Title
-          heading={channelDisplayName(channel)}
+          heading={'#' + channelDisplayName(channel)}
+          headingProps={{ bold: true }}
           label={properties.description}
-        ></Title>
+        />
       </FlexRow>
 
-      <StyledBox paddingTop="5" borderBottom="light"></StyledBox>
+      <StyledBox paddingTop="5" borderBottom="light" />
     </StyledBox>
   );
 };

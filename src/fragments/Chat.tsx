@@ -17,30 +17,36 @@ const Chat: React.FC = () => {
   const { channel, channelMessages, startChatSession } =
     useContext(ChatAppContext);
 
-  if (!channel) {
-    return (
-      <StyledBox margin="auto">
-        <Heading size={HeadingSizes.HUGE}>Select channel</Heading>
-      </StyledBox>
-    );
-  }
-
   const {
     items: messages,
     prepend,
     containerRef,
     boundaryRef,
-  } = usePaginator(() => channelMessages(channel), [channel]);
+  } = usePaginator(() => {
+    if (!channel) {
+      return;
+    }
+
+    return channelMessages(channel);
+  }, [channel]);
 
   useEffect(() => {
+    if (!channel) {
+      return;
+    }
+
     const session = startChatSession(channel, (message) => {
       prepend([message]);
     });
 
-    return session?.end;
+    if (!session) {
+      return;
+    }
+
+    return session.end;
   }, [channel]);
 
-  return (
+  return channel ? (
     <FlexColumn
       height="100%"
       width="100%"
@@ -56,6 +62,10 @@ const Chat: React.FC = () => {
       />
       <ChatMessageInput channel={channel} />
     </FlexColumn>
+  ) : (
+    <StyledBox margin="auto">
+      <Heading size={HeadingSizes.HUGE}>Select channel</Heading>
+    </StyledBox>
   );
 };
 

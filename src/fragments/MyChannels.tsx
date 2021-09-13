@@ -9,16 +9,12 @@ import {
   Icons,
   ScrollView,
 } from '../ui-kit/components';
-import { usePaginator } from '../ui-kit/hooks/usePaginator';
+import { usePaginator } from '../ui-kit/hooks';
 
-import DetailedChannel from './DetailedChannel';
+import MyChannelListItem from './MyChannelListItem';
 
 const MyChannels: React.FC = () => {
   const { joinedChannels, loading, currentUser } = useContext(ChatAppContext);
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
 
   const {
     containerRef,
@@ -26,7 +22,9 @@ const MyChannels: React.FC = () => {
     items: channels,
   } = usePaginator(() => joinedChannels(), [currentUser]);
 
-  return (
+  return loading ? (
+    <div>Loading...</div>
+  ) : (
     <>
       <FlexRow justifyContent="space-between" mx={6} marginBottom={1}>
         <Heading variant={HeadingVariants.INVERSE}>Channels</Heading>
@@ -43,7 +41,7 @@ const MyChannels: React.FC = () => {
 
       <ScrollView ref={containerRef}>
         {channels.map((channel) => (
-          <DetailedChannel key={channel.id} channel={channel} />
+          <MyChannelListItem key={channel.id} channel={channel} />
         ))}
         <div ref={boundaryRef} />
       </ScrollView>

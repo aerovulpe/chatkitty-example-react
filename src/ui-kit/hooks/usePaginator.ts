@@ -3,7 +3,7 @@ import { RefObject, useEffect, useRef, useState } from 'react';
 import { useVisibility } from 'ui-kit/hooks/useVisibility';
 
 const usePaginator = <I>(
-  paginator: () => Promise<ChatKittyPaginator<I> | null>,
+  paginator: () => Promise<ChatKittyPaginator<I> | null> | void,
   dependencies: unknown[],
   debounce = 500,
   isEnabled = true
@@ -29,9 +29,15 @@ const usePaginator = <I>(
   const atEnd = useVisibility(boundaryRef, containerRef, 0, '0px 0px 0px 0px');
 
   useEffect(() => {
+    const p = paginator();
+
     setLoading(true);
 
-    paginator().then((p) => {
+    if (!p) {
+      return;
+    }
+
+    p.then((p) => {
       setCurrentPagination(p);
 
       if (p) {

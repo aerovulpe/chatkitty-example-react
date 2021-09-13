@@ -85,41 +85,43 @@ const ChatMessageInput: React.FC<ChatMessageInputProps> = ({
 
   return (
     <StyledBox mx="6" marginBottom="3">
-      <FlexRow padding="2">
-        <FlexRow flexGrow={1}>
-          <Textarea
-            ref={textareaRef}
-            rows={1}
-            value={text}
-            onChange={textChanged}
-            onKeyPress={handleKeyPress}
-            placeholder="Type Message"
-          />
-        </FlexRow>
+      <StyledBox border="dark" borderRadius="messageEditor" position="relative">
+        <FlexRow padding="2">
+          <FlexRow flexGrow={1}>
+            <Textarea
+              ref={textareaRef}
+              rows={1}
+              value={text}
+              onChange={textChanged}
+              onKeyPress={handleKeyPress}
+              placeholder="Type Message"
+            />
+          </FlexRow>
 
-        {process.env.REACT_CHAT_APP_GIPHY_API_KEY && (
-          <GiphyInput onSelected={sendGif} />
-        )}
+          {process.env.REACT_CHAT_APP_GIPHY_API_KEY && (
+            <GiphyInput onSelected={sendGif} />
+          )}
 
-        <StyledBox marginLeft="1">
-          <EmojiInput value={text} onSelection={emojiInserted} />
-          <EmojiSuggestion value={text} onSelection={emojiInserted} />
-        </StyledBox>
-
-        {touch && (
-          <StyledBox
-            bg="active"
-            color="onPrimary"
-            padding="1"
-            margin={-1}
-            marginLeft="1"
-            borderRadius="light"
-            onClick={() => isDraftModified(draft) && sendMessageDraft(draft)}
-          >
-            <Icon icon={Icons.Send} title="Send Message" />
+          <StyledBox marginLeft="1">
+            <EmojiInput value={text} onSelection={emojiInserted} />
+            <EmojiSuggestion value={text} onSelection={emojiInserted} />
           </StyledBox>
-        )}
-      </FlexRow>
+
+          {touch && (
+            <StyledBox
+              bg="active"
+              color="onPrimary"
+              padding="1"
+              margin={-1}
+              marginLeft="1"
+              borderRadius="light"
+              onClick={() => isDraftModified(draft) && sendMessageDraft(draft)}
+            >
+              <Icon icon={Icons.Send} title="Send Message" />
+            </StyledBox>
+          )}
+        </FlexRow>
+      </StyledBox>
     </StyledBox>
   );
 };
