@@ -7,28 +7,14 @@ import {
   HeadingSizes,
   StyledBox,
 } from '../ui-kit/components';
-import { usePaginator } from '../ui-kit/hooks';
 
 import ChatHeader from './ChatHeader';
 import ChatMessageInput from './ChatMessageInput';
 import ChatMessages from './ChatMessages';
 
 const Chat: React.FC = () => {
-  const { channel, channelMessages, startChatSession } =
+  const { channel, startChatSession, prependToMessages, showChannel } =
     useContext(ChatAppContext);
-
-  const {
-    items: messages,
-    prepend,
-    containerRef,
-    boundaryRef,
-  } = usePaginator(() => {
-    if (!channel) {
-      return;
-    }
-
-    return channelMessages(channel);
-  }, [channel]);
 
   useEffect(() => {
     if (!channel) {
@@ -36,7 +22,7 @@ const Chat: React.FC = () => {
     }
 
     const session = startChatSession(channel, (message) => {
-      prepend([message]);
+      prependToMessages([message]);
     });
 
     if (!session) {
@@ -55,11 +41,7 @@ const Chat: React.FC = () => {
       borderRight="light"
     >
       <ChatHeader channel={channel} />
-      <ChatMessages
-        messages={messages}
-        containerRef={containerRef}
-        boundaryRef={boundaryRef}
-      />
+      <ChatMessages channel={channel} />
       <ChatMessageInput channel={channel} />
     </FlexColumn>
   ) : (

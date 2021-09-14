@@ -14,13 +14,22 @@ import { usePaginator } from '../ui-kit/hooks';
 import MyChannelListItem from './MyChannelListItem';
 
 const MyChannels: React.FC = () => {
-  const { joinedChannels, loading, currentUser } = useContext(ChatAppContext);
+  const { joinedChannelsPaginator, loading, currentUser, showChannel } =
+    useContext(ChatAppContext);
 
   const {
     containerRef,
     boundaryRef,
     items: channels,
-  } = usePaginator(() => joinedChannels(), [currentUser]);
+  } = usePaginator({
+    paginator: () => joinedChannelsPaginator(),
+    onInitialPageFetched: (items) => {
+      if (items) {
+        showChannel(items[0]);
+      }
+    },
+    dependencies: [currentUser],
+  });
 
   return loading ? (
     <div>Loading...</div>

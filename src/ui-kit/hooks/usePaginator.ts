@@ -2,12 +2,23 @@ import { ChatKittyPaginator } from 'chatkitty';
 import { RefObject, useEffect, useRef, useState } from 'react';
 import { useVisibility } from 'ui-kit/hooks/useVisibility';
 
-const usePaginator = <I>(
-  paginator: () => Promise<ChatKittyPaginator<I> | null> | void,
-  dependencies: unknown[],
+interface UsePaginatorProps<I> {
+  paginator: () => Promise<ChatKittyPaginator<I> | null> | void;
+  dependencies: unknown[];
+  onInitialPageFetched?: (items: I[]) => void;
+  onPageFetched?: (items: I[]) => void;
+  debounce?: number;
+  isEnabled?: boolean;
+}
+
+const usePaginator = <I>({
+  paginator,
+  dependencies,
+  onInitialPageFetched = () => {},
+  onPageFetched = () => {},
   debounce = 500,
-  isEnabled = true
-): {
+  isEnabled = true,
+}: UsePaginatorProps<I>): {
   loading: boolean;
   items: I[];
   prepend: (newItems: I[]) => void;
@@ -42,6 +53,10 @@ const usePaginator = <I>(
 
       if (p) {
         setItems(p.items);
+
+        onInitialPageFetched(p.items);
+
+        onPageFetched(p.items);
       }
 
       setLoading(false);
@@ -70,6 +85,8 @@ const usePaginator = <I>(
           setItems((old) => [...old, ...next.items]);
 
           setCurrentPagination(next);
+
+          onPageFetched(next.items);
         }
 
         // enforce a delay between fetching pages
@@ -84,7 +101,7 @@ const usePaginator = <I>(
         clearTimeout(scheduled);
       }
     };
-  }, [currentPaginator, shouldUpdate]);
+  }, [loading, atEnd, currentPaginator, isEnabled]);
 
   const prepend = (newItems: I[]) => {
     setItems((current) => [...newItems, ...current]);

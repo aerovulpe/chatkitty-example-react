@@ -15,7 +15,6 @@ import ChatKitty, {
 } from 'chatkitty';
 import React, { ReactElement, useEffect, useState } from 'react';
 
-import { SentMessageResult } from '../../../chatkitty-js/src';
 import ChatKittyConfiguration from '../configuration/chatkitty';
 import {
   isTextMessageDraft,
@@ -32,17 +31,20 @@ interface ChatAppContext {
   currentUser: CurrentUser | null;
   online: boolean;
   users: () => Promise<ChatKittyPaginator<User> | null>;
-  joinedChannels: () => Promise<ChatKittyPaginator<Channel> | null>;
+  joinedChannelsPaginator: () => Promise<ChatKittyPaginator<Channel> | null>;
   channelDisplayName: (channel: Channel) => string;
   channelDisplayPicture: (channel: Channel) => string | null;
   channelUnreadMessagesCount: (channel: Channel) => Promise<number>;
-  channelMessages: (
+  messages: Message[];
+  messagesPaginator: (
     channel: Channel
   ) => Promise<ChatKittyPaginator<Message> | null>;
   startChatSession: (
     channel: Channel,
     onReceivedMessage: (message: Message) => void
   ) => ChatSession | null;
+  prependToMessages: (messages: Message[]) => void;
+  appendToMessages: (messages: Message[]) => void;
   channel: Channel | null;
   messageDraft: TextMessageDraft;
   updateMessageDraft: (draft: TextMessageDraft) => void;
@@ -61,13 +63,16 @@ const initialValues: ChatAppContext = {
   currentUser: null,
   online: false,
   users: () => Promise.prototype,
-  joinedChannels: () => Promise.prototype,
+  joinedChannelsPaginator: () => Promise.prototype,
   channelDisplayName: () => '',
   channelDisplayPicture: () => null,
   channelUnreadMessagesCount: () => Promise.prototype,
-  channelMessages: () => Promise.prototype,
   startChatSession: () => ChatSession.prototype,
+  messagesPaginator: () => Promise.prototype,
+  prependToMessages: () => {},
+  appendToMessages: () => {},
   channel: null,
+  messages: [],
   messageDraft: {
     type: MessageDraftType.Text,
     text: '',
@@ -95,6 +100,7 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
   const [currentUser, setCurrentUser] = useState(initialValues.currentUser);
   const [online, setOnline] = useState(initialValues.online);
   const [channel, setChannel] = useState(initialValues.channel);
+  const [messages, setMessages] = useState(initialValues.messages);
   const [messageDraft, setMessageDraft] = useState(initialValues.messageDraft);
   const [loading, setLoading] = useState(initialValues.loading);
   const [layout, setLayout] = useState(initialValues.layout);
@@ -179,7 +185,7 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
     return null;
   };
 
-  const joinedChannels = async () => {
+  const joinedChannelsPaginator = async () => {
     const result = await kitty.getChannels({
       filter: { joined: true },
     });
@@ -237,7 +243,7 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
     return 0;
   };
 
-  const channelMessages = async (channel: Channel) => {
+  const messagesPaginator = async (channel: Channel) => {
     const result = await kitty.getMessages({
       channel,
     });
@@ -247,6 +253,14 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
     }
 
     return null;
+  };
+
+  const prependToMessages = (items: Message[]) => {
+    setMessages((old) => [...items, ...old]);
+  };
+
+  const appendToMessages = (items: Message[]) => {
+    setMessages((old) => [...old, ...items]);
   };
 
   const updateMessageDraft = async (draft: TextMessageDraft) => {
@@ -291,17 +305,20 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
         currentUser,
         online,
         users,
-        joinedChannels,
+        joinedChannelsPaginator,
         channelDisplayName,
         channelDisplayPicture,
         channelUnreadMessagesCount,
-        channelMessages,
         startChatSession,
+        messagesPaginator,
+        prependToMessages,
+        appendToMessages,
         messageDraft,
         updateMessageDraft,
         discardMessageDraft,
         sendMessageDraft,
         channel,
+        messages,
         loading,
         layout,
         login,
