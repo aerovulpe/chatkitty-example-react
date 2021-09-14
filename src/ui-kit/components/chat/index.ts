@@ -1,3 +1,5 @@
+export * from './channel/joined-channel-list-item-view';
+export * from './channel/joinable-channel-list-item-view';
 export * from './text-message/text-message';
 export * from './image-message/image-message';
 export * from './link-message/link-message';

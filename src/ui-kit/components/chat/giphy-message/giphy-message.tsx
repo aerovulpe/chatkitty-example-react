@@ -10,7 +10,7 @@ type GiphyMessageItemProps = {
   title: string;
   /** Author of the Gif upload */
   author?: string;
-  children: ReactElement | null;
+  children: ReactElement | JSX.Element[] | null;
 };
 
 const Wrapper = Styled.div`

@@ -4,19 +4,19 @@ import React, { useContext, useEffect, useState } from 'react';
 import { ChatAppContext } from '../providers/ChatAppProvider';
 import { JoinedChannelListItemView } from '../ui-kit/components/chat/channel/joined-channel-list-item-view';
 
-interface DetailedChannelViewProps {
+interface MyChannelListItemProps {
   channel: Channel;
 }
 
-const MyChannelListItem: React.FC<DetailedChannelViewProps> = ({
+const MyChannelListItem: React.FC<MyChannelListItemProps> = ({
   channel,
-}: DetailedChannelViewProps) => {
+}: MyChannelListItemProps) => {
   const {
     channel: selectedChannel,
     channelDisplayName,
     channelDisplayPicture,
     channelUnreadMessagesCount,
-    showChannel,
+    showChat,
   } = useContext(ChatAppContext);
 
   const [unreadMessagesCount, setUnreadMessagesCount] = useState(0);
@@ -38,7 +38,7 @@ const MyChannelListItem: React.FC<DetailedChannelViewProps> = ({
       selected={channel.id === selectedChannel?.id}
       key={channel.id}
       unreadMessageCount={unreadMessagesCount}
-      onClick={() => showChannel(channel)}
+      onClick={() => showChat(channel)}
     />
   );
 };

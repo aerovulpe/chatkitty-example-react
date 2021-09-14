@@ -6,7 +6,7 @@ import Styled from 'styled-components/macro';
 interface ModalProps {
   /** Control the open state of the Modal */
   open?: boolean;
-  children: ReactElement | null;
+  children: ReactElement | JSX.Element[] | null;
 }
 
 const Overlay = Styled.div`

@@ -14,8 +14,13 @@ import { usePaginator } from '../ui-kit/hooks';
 import MyChannelListItem from './MyChannelListItem';
 
 const MyChannels: React.FC = () => {
-  const { joinedChannelsPaginator, loading, currentUser, showChannel } =
-    useContext(ChatAppContext);
+  const {
+    joinedChannelsPaginator,
+    loading,
+    currentUser,
+    showChat,
+    showJoinChannel,
+  } = useContext(ChatAppContext);
 
   const {
     containerRef,
@@ -25,7 +30,7 @@ const MyChannels: React.FC = () => {
     paginator: () => joinedChannelsPaginator(),
     onInitialPageFetched: (items) => {
       if (items) {
-        showChannel(items[0]);
+        showChat(items[0]);
       }
     },
     dependencies: [currentUser],
@@ -41,7 +46,7 @@ const MyChannels: React.FC = () => {
           icon={Icons.Add}
           color={'onPrimary'}
           onClick={() => {
-            // TODO
+            showJoinChannel();
           }}
           title="Join channel"
           clickable

@@ -13,7 +13,7 @@ import ChatMessageInput from './ChatMessageInput';
 import ChatMessages from './ChatMessages';
 
 const Chat: React.FC = () => {
-  const { channel, startChatSession, prependToMessages, showChannel } =
+  const { channel, startChatSession, prependToMessages, showChat } =
     useContext(ChatAppContext);
 
   useEffect(() => {

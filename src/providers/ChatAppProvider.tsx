@@ -32,6 +32,7 @@ interface ChatAppContext {
   online: boolean;
   users: () => Promise<ChatKittyPaginator<User> | null>;
   joinedChannelsPaginator: () => Promise<ChatKittyPaginator<Channel> | null>;
+  joinableChannelsPaginator: () => Promise<ChatKittyPaginator<Channel> | null>;
   channelDisplayName: (channel: Channel) => string;
   channelDisplayPicture: (channel: Channel) => string | null;
   channelUnreadMessagesCount: (channel: Channel) => Promise<number>;
@@ -53,7 +54,9 @@ interface ChatAppContext {
   loading: boolean;
   showMenu: () => void;
   hideMenu: () => void;
-  showChannel: (channel: Channel) => void;
+  showChat: (channel: Channel) => void;
+  showJoinChannel: () => void;
+  hideJoinChannel: () => void;
   layout: LayoutState;
   logout: () => void;
 }
@@ -64,6 +67,7 @@ const initialValues: ChatAppContext = {
   online: false,
   users: () => Promise.prototype,
   joinedChannelsPaginator: () => Promise.prototype,
+  joinableChannelsPaginator: () => Promise.prototype,
   channelDisplayName: () => '',
   channelDisplayPicture: () => null,
   channelUnreadMessagesCount: () => Promise.prototype,
@@ -83,8 +87,10 @@ const initialValues: ChatAppContext = {
   loading: false,
   showMenu: () => {},
   hideMenu: () => {},
-  showChannel: () => {},
-  layout: { menu: false, chat: false },
+  showChat: () => {},
+  showJoinChannel: () => {},
+  hideJoinChannel: () => {},
+  layout: { menu: false, chat: false, joinChannel: false },
   logout: () => {},
 };
 
@@ -119,6 +125,7 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
     return {
       menu: views.has('Menu'),
       chat: views.has('Chat'),
+      joinChannel: views.has('Join Channel'),
     };
   };
 
@@ -142,12 +149,20 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
     hideView('Menu');
   };
 
-  const showChannel = (channel: Channel) => {
+  const showChat = (channel: Channel) => {
     hideView('Menu');
 
     setChannel(channel);
 
     showView('Chat');
+  };
+
+  const showJoinChannel = () => {
+    showView('Join Channel');
+  };
+
+  const hideJoinChannel = () => {
+    hideView('Join Channel');
   };
 
   useEffect(() => {
@@ -188,6 +203,18 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
   const joinedChannelsPaginator = async () => {
     const result = await kitty.getChannels({
       filter: { joined: true },
+    });
+
+    if (succeeded<GetChannelsSucceededResult>(result)) {
+      return result.paginator;
+    }
+
+    return null;
+  };
+
+  const joinableChannelsPaginator = async () => {
+    const result = await kitty.getChannels({
+      filter: { joined: false },
     });
 
     if (succeeded<GetChannelsSucceededResult>(result)) {
@@ -301,11 +328,14 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
       value={{
         showMenu,
         hideMenu,
-        showChannel,
+        showChat,
+        showJoinChannel,
+        hideJoinChannel,
         currentUser,
         online,
         users,
         joinedChannelsPaginator,
+        joinableChannelsPaginator,
         channelDisplayName,
         channelDisplayPicture,
         channelUnreadMessagesCount,
