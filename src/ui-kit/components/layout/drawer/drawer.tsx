@@ -20,7 +20,7 @@ const Wrapper = Styled(motion.section)<DrawerProps>`
   ${background}
   flex: 0 0 auto;
   flex-direction: column;
-  height: 100vh;
+  height: 100%;
   width: 100%;
   z-index: 100;
 

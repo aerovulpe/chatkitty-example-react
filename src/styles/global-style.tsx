@@ -32,12 +32,12 @@ const GlobalStyle = createGlobalStyle<{ theme: Theme }>`
   /* Works on Firefox */
   * {
     scrollbar-width: thin;
-    scrollbar-color: purple rgba(0, 0, 0, 0);
+    scrollbar-color: ${({ theme }) => theme.colors.primary[0]} rgba(0, 0, 0, 0);
   }
   
   /* Works on Chrome, Edge, and Safari */
   *::-webkit-scrollbar {
-    width: 9px;
+    width: 5px;
   }
   
   *::-webkit-scrollbar-track {
@@ -45,7 +45,7 @@ const GlobalStyle = createGlobalStyle<{ theme: Theme }>`
   }
   
   *::-webkit-scrollbar-thumb {
-    background-color: purple;
+    background-color: ${({ theme }) => theme.colors.primary[0]};
     border-radius: 15px;
     border: 3px solid rgba(0, 0, 0, 0);
   }
