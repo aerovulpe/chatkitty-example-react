@@ -17,6 +17,7 @@ const MyChannelListItem: React.FC<MyChannelListItemProps> = ({
     channelDisplayPicture,
     channelUnreadMessagesCount,
     showChat,
+    leaveChannel,
   } = useContext(ChatAppContext);
 
   const [unreadMessagesCount, setUnreadMessagesCount] = useState(0);
@@ -33,7 +34,7 @@ const MyChannelListItem: React.FC<MyChannelListItemProps> = ({
       name={channelDisplayName(channel)}
       displayPicture={channelDisplayPicture(channel)}
       onLeave={() => {
-        // TODO
+        leaveChannel(channel);
       }}
       selected={channel.id === selectedChannel?.id}
       key={channel.id}

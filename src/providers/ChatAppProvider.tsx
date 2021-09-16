@@ -9,6 +9,7 @@ import ChatKitty, {
   GetMessagesSucceededResult,
   GetUsersSucceededResult,
   isDirectChannel,
+  LeftChannelResult,
   Message,
   StartedChatSessionResult,
   succeeded,
@@ -36,9 +37,11 @@ interface ChatAppContext {
   joinedChannelsPaginator: () => Promise<ChatKittyPaginator<Channel> | null>;
   joinableChannelsPaginator: () => Promise<ChatKittyPaginator<Channel> | null>;
   joinChannel: (channel: Channel) => void;
+  leaveChannel: (channel: Channel) => void;
   onJoinedChannel: (
     handler: (channel: Channel) => void
   ) => ChatKittyUnsubscribe;
+  onLeftChannel: (handler: (channel: Channel) => void) => ChatKittyUnsubscribe;
   channelDisplayName: (channel: Channel) => string;
   channelDisplayPicture: (channel: Channel) => string | null;
   channelUnreadMessagesCount: (channel: Channel) => Promise<number>;
@@ -76,6 +79,8 @@ const initialValues: ChatAppContext = {
   joinableChannelsPaginator: () => Promise.prototype,
   joinChannel: () => {},
   onJoinedChannel: () => () => {},
+  leaveChannel: () => {},
+  onLeftChannel: () => () => {},
   channelDisplayName: () => '',
   channelDisplayPicture: () => null,
   channelUnreadMessagesCount: () => Promise.prototype,
@@ -157,13 +162,24 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
     hideView('Menu');
   };
 
-  const showChat = (channel: Channel) => {
+  const showChat = (c: Channel) => {
+    if (c.id === channel?.id) {
+      return;
+    }
+
     hideView('Menu');
 
-    setChannel(channel);
+    setChannel(c);
     setMessages(initialValues.messages);
 
     showView('Chat');
+  };
+
+  const hideChat = () => {
+    setChannel(initialValues.channel);
+    setMessages(initialValues.messages);
+
+    hideView('Chat');
   };
 
   const showJoinChannel = () => {
@@ -192,8 +208,7 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
     setLoading(true);
 
     await kitty.startSession({
-      username:
-        username || demoUsers[Math.floor(Math.random() * demoUsers.length)],
+      username: username || demoUsers[0],
     });
 
     setLoading(false);
@@ -243,8 +258,23 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
     }
   };
 
+  const leaveChannel = async (c: Channel) => {
+    const result = await kitty.leaveChannel({ channel: c });
+
+    if (
+      succeeded<LeftChannelResult>(result) &&
+      result.channel.id === channel?.id
+    ) {
+      hideChat();
+    }
+  };
+
   const onJoinedChannel = (handler: (channel: Channel) => void) => {
     return kitty.onChannelJoined(handler);
+  };
+
+  const onLeftChannel = (handler: (channel: Channel) => void) => {
+    return kitty.onChannelLeft(handler);
   };
 
   const channelDisplayName = (channel: Channel): string => {
@@ -361,6 +391,8 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
         joinableChannelsPaginator,
         joinChannel,
         onJoinedChannel,
+        onLeftChannel,
+        leaveChannel,
         channelDisplayName,
         channelDisplayPicture,
         channelUnreadMessagesCount,

@@ -23,6 +23,7 @@ const usePaginator = <I>({
   items: I[];
   prepend: (newItems: I[]) => void;
   append: (newItems: I[]) => void;
+  remove: (predicate: (item: I) => boolean) => void;
   containerRef: RefObject<HTMLDivElement>;
   boundaryRef: RefObject<HTMLDivElement>;
 } => {
@@ -111,7 +112,11 @@ const usePaginator = <I>({
     setItems((current) => [...current, ...newItems]);
   };
 
-  return { loading, items, prepend, append, containerRef, boundaryRef };
+  const remove = (predicate: (item: I) => boolean) => {
+    setItems((current) => current.filter((item) => !predicate(item)));
+  };
+
+  return { loading, items, prepend, append, remove, containerRef, boundaryRef };
 };
 
 export { usePaginator };

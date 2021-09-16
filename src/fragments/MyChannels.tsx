@@ -17,6 +17,7 @@ const MyChannels: React.FC = () => {
   const {
     joinedChannelsPaginator,
     onJoinedChannel,
+    onLeftChannel,
     loading,
     currentUser,
     showChat,
@@ -26,6 +27,7 @@ const MyChannels: React.FC = () => {
   const {
     items: channels,
     append,
+    remove,
     containerRef,
     boundaryRef,
   } = usePaginator({
@@ -41,6 +43,12 @@ const MyChannels: React.FC = () => {
   useEffect(() => {
     return onJoinedChannel((channel) => {
       append([channel]);
+    });
+  }, [currentUser]);
+
+  useEffect(() => {
+    return onLeftChannel((channel) => {
+      remove((c) => c.id === channel.id);
     });
   }, [currentUser]);
 
