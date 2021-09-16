@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 
 import { ChatAppContext } from '../providers/ChatAppProvider';
 import {
@@ -16,6 +16,7 @@ import MyChannelListItem from './MyChannelListItem';
 const MyChannels: React.FC = () => {
   const {
     joinedChannelsPaginator,
+    onJoinedChannel,
     loading,
     currentUser,
     showChat,
@@ -23,9 +24,10 @@ const MyChannels: React.FC = () => {
   } = useContext(ChatAppContext);
 
   const {
+    items: channels,
+    append,
     containerRef,
     boundaryRef,
-    items: channels,
   } = usePaginator({
     paginator: () => joinedChannelsPaginator(),
     onInitialPageFetched: (items) => {
@@ -35,6 +37,12 @@ const MyChannels: React.FC = () => {
     },
     dependencies: [currentUser],
   });
+
+  useEffect(() => {
+    return onJoinedChannel((channel) => {
+      append([channel]);
+    });
+  }, [currentUser]);
 
   return loading ? (
     <div>Loading...</div>

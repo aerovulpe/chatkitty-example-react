@@ -1,6 +1,7 @@
 import ChatKitty, {
   Channel,
   ChatKittyPaginator,
+  ChatKittyUnsubscribe,
   ChatSession,
   CurrentUser,
   GetChannelsSucceededResult,
@@ -15,6 +16,7 @@ import ChatKitty, {
 } from 'chatkitty';
 import React, { ReactElement, useEffect, useState } from 'react';
 
+import { JoinedChannelResult } from '../../../chatkitty-js/src';
 import ChatKittyConfiguration from '../configuration/chatkitty';
 import {
   isTextMessageDraft,
@@ -33,6 +35,10 @@ interface ChatAppContext {
   users: () => Promise<ChatKittyPaginator<User> | null>;
   joinedChannelsPaginator: () => Promise<ChatKittyPaginator<Channel> | null>;
   joinableChannelsPaginator: () => Promise<ChatKittyPaginator<Channel> | null>;
+  joinChannel: (channel: Channel) => void;
+  onJoinedChannel: (
+    handler: (channel: Channel) => void
+  ) => ChatKittyUnsubscribe;
   channelDisplayName: (channel: Channel) => string;
   channelDisplayPicture: (channel: Channel) => string | null;
   channelUnreadMessagesCount: (channel: Channel) => Promise<number>;
@@ -68,6 +74,8 @@ const initialValues: ChatAppContext = {
   users: () => Promise.prototype,
   joinedChannelsPaginator: () => Promise.prototype,
   joinableChannelsPaginator: () => Promise.prototype,
+  joinChannel: () => {},
+  onJoinedChannel: () => () => {},
   channelDisplayName: () => '',
   channelDisplayPicture: () => null,
   channelUnreadMessagesCount: () => Promise.prototype,
@@ -153,6 +161,7 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
     hideView('Menu');
 
     setChannel(channel);
+    setMessages(initialValues.messages);
 
     showView('Chat');
   };
@@ -222,6 +231,20 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
     }
 
     return null;
+  };
+
+  const joinChannel = async (channel: Channel) => {
+    const result = await kitty.joinChannel({ channel });
+
+    if (succeeded<JoinedChannelResult>(result)) {
+      hideView('Join Channel');
+
+      showChat(result.channel);
+    }
+  };
+
+  const onJoinedChannel = (handler: (channel: Channel) => void) => {
+    return kitty.onChannelJoined(handler);
   };
 
   const channelDisplayName = (channel: Channel): string => {
@@ -336,6 +359,8 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
         users,
         joinedChannelsPaginator,
         joinableChannelsPaginator,
+        joinChannel,
+        onJoinedChannel,
         channelDisplayName,
         channelDisplayPicture,
         channelUnreadMessagesCount,

@@ -5,7 +5,6 @@ import { ThemeContext } from 'styled-components';
 import { ChatAppContext } from '../providers/ChatAppProvider';
 import { FlexColumn, ScrollView } from '../ui-kit/components';
 import { Avatar, AvatarVariants } from '../ui-kit/components/chat';
-import { ImageAvatar } from '../ui-kit/components/chat/avatar/image-avatar';
 import { usePaginator } from '../ui-kit/hooks';
 import { getUniqueColor } from '../ui-kit/utilities';
 
@@ -40,7 +39,7 @@ const ChatMessages: React.FC<ChatMessagesProps> = ({
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    messagesEndRef.current?.scrollIntoView();
   };
 
   useEffect(() => {
@@ -62,13 +61,21 @@ const ChatMessages: React.FC<ChatMessagesProps> = ({
             key={message.id}
             avatar={
               isUserMessage(message) ? (
-                <ImageAvatar image={message.user.displayPictureUrl} />
+                <Avatar
+                  variant={AvatarVariants.ROUND}
+                  bg={getUniqueColor(
+                    message.user.displayName,
+                    theme.colors.avatars
+                  )}
+                >
+                  {message.user.displayName[0]}
+                </Avatar>
               ) : (
                 <Avatar
                   variant={AvatarVariants.ROUND}
                   bg={getUniqueColor('system', theme.colors.avatars)}
                 >
-                  ChatKitty
+                  C
                 </Avatar>
               )
             }

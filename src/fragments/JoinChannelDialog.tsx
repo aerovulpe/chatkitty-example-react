@@ -14,7 +14,7 @@ import { JoinableChannelListItemView } from '../ui-kit/components/chat';
 import { usePaginator } from '../ui-kit/hooks';
 
 const JoinChannelDialog: React.FC = () => {
-  const { layout, hideJoinChannel, joinableChannelsPaginator, currentUser } =
+  const { layout, hideJoinChannel, joinableChannelsPaginator, joinChannel } =
     useContext(ChatAppContext);
 
   const {
@@ -23,7 +23,7 @@ const JoinChannelDialog: React.FC = () => {
     items: channels,
   } = usePaginator({
     paginator: () => joinableChannelsPaginator(),
-    dependencies: [currentUser],
+    dependencies: [layout.joinChannel],
   });
 
   return (
@@ -52,7 +52,7 @@ const JoinChannelDialog: React.FC = () => {
             <JoinableChannelListItemView
               key={channel.id}
               onClick={() => {
-                // TODO
+                joinChannel(channel);
               }}
               name={channel.name}
               description={properties.description}
