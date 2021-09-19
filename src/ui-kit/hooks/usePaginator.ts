@@ -16,7 +16,7 @@ const usePaginator = <I>({
   dependencies,
   onInitialPageFetched = () => {},
   onPageFetched = () => {},
-  debounce = 500,
+  debounce = 0,
   isEnabled = true,
 }: UsePaginatorProps<I>): {
   loading: boolean;
@@ -38,7 +38,12 @@ const usePaginator = <I>({
   const containerRef = useRef<HTMLDivElement>(null);
   const boundaryRef = useRef<HTMLDivElement>(null);
 
-  const atEnd = useVisibility(boundaryRef, containerRef, 0, '0px 0px 0px 0px');
+  const atEnd = useVisibility(
+    boundaryRef,
+    containerRef,
+    0,
+    '0px 0px 500px 0px'
+  );
 
   useEffect(() => {
     const p = paginator();

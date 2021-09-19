@@ -1,5 +1,5 @@
 import { Channel, isUserMessage } from 'chatkitty';
-import React, { useContext, useEffect, useRef } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { ThemeContext } from 'styled-components';
 
 import { ChatAppContext } from '../providers/ChatAppProvider';
@@ -22,6 +22,9 @@ const ChatMessages: React.FC<ChatMessagesProps> = ({
   const { messages, messagesPaginator, appendToMessages } =
     useContext(ChatAppContext);
 
+  const [height, setHeight] = useState(0);
+  const [scrollPosition, setScrollPosition] = useState(0);
+
   const { containerRef, boundaryRef } = usePaginator({
     paginator: () => {
       if (!channel) {
@@ -38,16 +41,60 @@ const ChatMessages: React.FC<ChatMessagesProps> = ({
 
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
+  const handleScroll = (event: React.UIEvent<HTMLDivElement>) => {
+    const scrollPosition = event.currentTarget?.scrollTop;
+
+    if (scrollPosition) {
+      setScrollPosition(scrollPosition);
+    }
+  };
+
+  const restoreScrollPosition = () => {
+    if (containerRef.current) {
+      if (scrollPosition) {
+        containerRef.current.scrollTo(0, scrollPosition);
+      } else {
+        // scroll to bottom
+        containerRef.current.scrollTo(0, containerRef.current.scrollHeight);
+      }
+    }
+  };
+
+  const current = containerRef.current;
+
+  // when history is pulled, scroll down to compensate
+  const newHeight = current?.scrollHeight;
+  useEffect(() => {
+    if (height === 0 && newHeight) {
+      setHeight(newHeight);
+    } else if (newHeight && newHeight !== height) {
+      if (current) {
+        current.scrollTop += newHeight - height;
+      }
+      setHeight(newHeight);
+    }
+  }, [newHeight, height, current]);
+
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView();
   };
 
+  const hasReachedBottom = current
+    ? current.scrollHeight - current.clientHeight === current.scrollTop
+    : false;
+
   useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
+    if (hasReachedBottom) {
+      scrollToBottom();
+    }
+  }, [messages.length, hasReachedBottom, scrollToBottom]);
+
+  useEffect(() => {
+    restoreScrollPosition();
+  }, []);
 
   return (
-    <ScrollView ref={containerRef}>
+    <ScrollView ref={containerRef} onScroll={handleScroll}>
       <FlexColumn
         minHeight="100%"
         flexGrow={1}
