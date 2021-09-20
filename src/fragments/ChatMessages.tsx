@@ -9,6 +9,7 @@ import { usePaginator } from '../ui-kit/hooks';
 import { getUniqueColor } from '../ui-kit/utilities';
 
 import MessageListItem from './MessageListItem';
+import WelcomeMessage from './WelcomeMessage';
 
 interface ChatMessagesProps {
   channel: Channel;
@@ -128,6 +129,7 @@ const ChatMessages: React.FC<ChatMessagesProps> = ({
             }
           />
         ))}
+        <WelcomeMessage />
         <div ref={boundaryRef} />
         {/* This moves the list of messages to the bottom, since there's a bug with flex-end scroll */}
         <FlexColumn flex="1 1 auto"></FlexColumn>
