@@ -208,7 +208,8 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
     setLoading(true);
 
     await kitty.startSession({
-      username: username || demoUsers[0],
+      username:
+        username || demoUsers[Math.floor(Math.random() * demoUsers.length)],
     });
 
     setLoading(false);
