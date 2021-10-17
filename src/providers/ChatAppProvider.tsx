@@ -9,6 +9,7 @@ import ChatKitty, {
   GetMessagesSucceededResult,
   GetUsersSucceededResult,
   isDirectChannel,
+  JoinedChannelResult,
   LeftChannelResult,
   Message,
   StartedChatSessionResult,
@@ -17,7 +18,6 @@ import ChatKitty, {
 } from 'chatkitty';
 import React, { ReactElement, useEffect, useState } from 'react';
 
-import { JoinedChannelResult } from '../../../chatkitty-js/src';
 import ChatKittyConfiguration from '../configuration/chatkitty';
 import {
   isTextMessageDraft,

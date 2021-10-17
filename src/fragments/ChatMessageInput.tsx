@@ -1,13 +1,12 @@
 import { IGif } from '@giphy/js-types';
+import { Channel } from 'chatkitty';
 import React, { useContext, useRef } from 'react';
 import { ThemeContext } from 'styled-components';
 
-import { Channel } from '../../../chatkitty-js';
 import {
   isDraftModified,
   MessageDraftType,
   newTextMessageDraft,
-  TextMessageDraft,
 } from '../models/message-draft';
 import { ChatAppContext } from '../providers/ChatAppProvider';
 import {

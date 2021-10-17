@@ -59,6 +59,12 @@
     "import/no-named-as-default": 0,
     "no-param-reassign": [2, { "props": false }],
     "@typescript-eslint/no-empty-function": ["error", { "allow": ["arrowFunctions"] }],
-    "@typescript-eslint/no-empty-interface": "off"
+    "@typescript-eslint/no-empty-interface": "off",
+    "prettier/prettier": [
+      "error",
+      {
+        "endOfLine": "auto"
+      }
+    ]
   }
 }

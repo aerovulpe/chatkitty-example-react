@@ -1,11 +1,6 @@
 import { IGif } from '@giphy/js-types';
 import invariant from 'invariant';
 
-import {
-  ChatKittyResult,
-  ChatKittySucceededResult,
-} from '../../../chatkitty-js/src';
-
 export enum MessageDraftType {
   Text = 'text',
   Giphy = 'giphy',

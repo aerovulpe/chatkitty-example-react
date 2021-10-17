@@ -1163,6 +1163,13 @@
   dependencies:
     regenerator-runtime "^0.13.4"
 
+"@babel/runtime@^7.0.0":
+  version "7.15.4"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.15.4.tgz#fd17d16bfdf878e6dd02d19753a39fa8a8d9c84a"
+  integrity sha512-99catp6bHCaxr4sJ/DbTGgHS4+Rs2RVd2g7iOap6SLGPDknRK9ztKNsE/Fg6QhSeh1FGE5f6gHGQmvvn3I3xhw==
+  dependencies:
+    regenerator-runtime "^0.13.4"
+
 "@babel/runtime@^7.10.2", "@babel/runtime@^7.11.2", "@babel/runtime@^7.5.5", "@babel/runtime@^7.7.2", "@babel/runtime@^7.8.4":
   version "7.12.18"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.12.18.tgz#af137bd7e7d9705a412b3caaf991fe6aaa97831b"
@@ -1317,6 +1324,11 @@
     js-yaml "^3.13.1"
     minimatch "^3.0.4"
     strip-json-comments "^3.1.1"
+
+"@giphy/js-types@^4.0.3":
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/@giphy/js-types/-/js-types-4.1.0.tgz#987b184bf848c81092ba61ab10895096eefa78de"
+  integrity sha512-+qSN4Mx4TmrjLQm4SC0I/ZBkb5eWM94sljXwfjIlqn0GMSR3geqEqwmE9Uf/ldgzFh+XMMCasQjIdUl2nWc++Q==
 
 "@hapi/address@2.x.x":
   version "2.1.4"
@@ -1945,6 +1957,13 @@
   integrity sha512-kSjgDMZONiIfSH1Nxcr5JIRMwUetDki63FSQfpTCz8ogF3Ulqm8+mr5f78dUYs6vMiB6gBusQqfQmBvHZj/lwg==
   dependencies:
     "@babel/types" "^7.3.0"
+
+"@types/emoji-mart@^3.0.5":
+  version "3.0.6"
+  resolved "https://registry.yarnpkg.com/@types/emoji-mart/-/emoji-mart-3.0.6.tgz#06dc3c883bc2a48e8fdc37f0a3ebb5e15a145365"
+  integrity sha512-TbFLFkWvhZUeYkII94fB8bplhtRTUxekBjZehcKu7leq9gvg8IG7F9NBh0YJdH3XRiu+uk0Drviy+GzfcMkMCw==
+  dependencies:
+    "@types/react" "*"
 
 "@types/eslint@^7.2.6":
   version "7.2.6"
@@ -3606,10 +3625,10 @@ char-regex@^1.0.2:
   resolved "https://registry.yarnpkg.com/char-regex/-/char-regex-1.0.2.tgz#d744358226217f981ed58f479b1d6bcc29545dcf"
   integrity sha512-kWWXztvZ5SBQV+eRgKFeh8q5sLuZY2+8WUIzlxWVTg+oGwY14qylx1KbKzHd8P6ZYkAg0xyIDU9JMHhyJMZ1jw==
 
-chatkitty@^1.47.0:
-  version "1.47.0"
-  resolved "https://registry.yarnpkg.com/chatkitty/-/chatkitty-1.47.0.tgz#375953e448ccfeb2e49661ed1cc55e8570d14565"
-  integrity sha512-4r9EZzzkB+J9A/ac4GCVm9XJDRfiDhUv2gjimpJxVuIZMlcGJhd3nDaHspbxBiwx2jcOv/9yYKTlPI89InpZRA==
+chatkitty@1.50.0:
+  version "1.50.0"
+  resolved "https://registry.yarnpkg.com/chatkitty/-/chatkitty-1.50.0.tgz#197a93f2d6d2042ac241cb25fb16c042410198e1"
+  integrity sha512-qq337gsCx+Il/m0xI5XI8JVXjIUOniuFyX61p91/73vBRGJ4Q0vv6JldKZUTHmthCSo3Z4kMhesKbPrvFR8fnQ==
   dependencies:
     "@stomp/rx-stomp" "^1.1.2"
     axios "^0.21.1"
@@ -4750,6 +4769,14 @@ emittery@^0.7.1:
   version "0.7.2"
   resolved "https://registry.yarnpkg.com/emittery/-/emittery-0.7.2.tgz#25595908e13af0f5674ab419396e2fb394cdfa82"
   integrity sha512-A8OG5SR/ij3SsJdWDJdkkSYUjQdCUx6APQXem0SaEePBSRg4eymGYwBkKo1Y6DU+af/Jn2dBQqDBvjnr9Vi8nQ==
+
+emoji-mart@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/emoji-mart/-/emoji-mart-3.0.1.tgz#9ce86706e02aea0506345f98464814a662ca54c6"
+  integrity sha512-sxpmMKxqLvcscu6mFn9ITHeZNkGzIvD0BSNFE/LJESPbCA8s1jM6bCDPjWbV31xHq7JXaxgpHxLB54RCbBZSlg==
+  dependencies:
+    "@babel/runtime" "^7.0.0"
+    prop-types "^15.6.0"
 
 emoji-regex@^7.0.1:
   version "7.0.3"
@@ -9784,7 +9811,7 @@ prompts@2.4.0, prompts@^2.0.1:
     kleur "^3.0.3"
     sisteransi "^1.0.5"
 
-prop-types@^15.7.2:
+prop-types@^15.6.0, prop-types@^15.7.2:
   version "15.7.2"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.7.2.tgz#52c41e75b8c87e72b9d9360e0206b99dcbffa6c5"
   integrity sha512-8QQikdH7//R2vurIJSutZ1smHYTcLpRWEOlHnzcWHmBYrOGUysKwSsrC89BCiFj3CbrfJ/nXFdJepOVrY1GCHQ==
