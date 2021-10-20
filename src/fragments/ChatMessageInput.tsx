@@ -3,11 +3,6 @@ import { Channel } from 'chatkitty';
 import React, { useContext, useRef } from 'react';
 import { ThemeContext } from 'styled-components';
 
-import {
-  isDraftModified,
-  MessageDraftType,
-  newTextMessageDraft,
-} from '../models/message-draft';
 import { ChatAppContext } from '../providers/ChatAppProvider';
 import {
   FlexRow,
@@ -16,6 +11,11 @@ import {
   StyledBox,
   Textarea,
 } from '../ui-kit/components';
+import {
+  isDraftModified,
+  MessageDraftType,
+  newTextMessageDraft,
+} from '../ui-kit/components/chat/message-draft/message-draft';
 import { useMediaQuery } from '../ui-kit/hooks';
 
 import EmojiInput from './EmojiInput';

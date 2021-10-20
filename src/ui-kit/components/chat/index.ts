@@ -7,4 +7,5 @@ export * from './giphy-message/gif';
 export * from './giphy-message/giphy-message';
 export * from './giphy-message/giphy-message-placeholder';
 export * from './giphy-message/giphy-masonry';
+export * from './message-draft/message-draft';
 export * from './avatar/avatar';

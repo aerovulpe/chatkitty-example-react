@@ -19,13 +19,13 @@ import ChatKitty, {
 import React, { ReactElement, useEffect, useState } from 'react';
 
 import ChatKittyConfiguration from '../configuration/chatkitty';
+import { LayoutState, View } from '../navigation';
 import {
   isTextMessageDraft,
   MessageDraft,
   MessageDraftType,
   TextMessageDraft,
-} from '../models/message-draft';
-import { LayoutState, View } from '../navigation';
+} from '../ui-kit/components';
 
 const kitty = ChatKitty.getInstance(ChatKittyConfiguration.API_KEY);
 
