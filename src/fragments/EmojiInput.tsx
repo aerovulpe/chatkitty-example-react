@@ -1,9 +1,9 @@
 import 'emoji-mart/css/emoji-mart.css';
 import { EmojiData, Picker as EmojiPicker } from 'emoji-mart';
 import React, { useContext } from 'react';
+import { Dropdown } from 'react-chat-ui-kit';
+import { Icons } from 'react-chat-ui-kit';
 import { ThemeContext } from 'styled-components';
-import { Dropdown } from 'ui-kit/components/layout';
-import { Icons } from 'ui-kit/components/presentation';
 
 interface EmojiInputProps {
   value: string;

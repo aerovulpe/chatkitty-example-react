@@ -1,12 +1,12 @@
 import { Channel, isUserMessage } from 'chatkitty';
 import React, { useContext, useEffect, useRef, useState } from 'react';
+import { FlexColumn, ScrollView } from 'react-chat-ui-kit';
+import { Avatar, AvatarVariants } from 'react-chat-ui-kit';
+import { usePaginator } from 'react-chat-ui-kit';
+import { getUniqueColor } from 'react-chat-ui-kit';
 import { ThemeContext } from 'styled-components';
 
 import { ChatAppContext } from '../providers/ChatAppProvider';
-import { FlexColumn, ScrollView } from '../ui-kit/components';
-import { Avatar, AvatarVariants } from '../ui-kit/components/chat';
-import { usePaginator } from '../ui-kit/hooks';
-import { getUniqueColor } from '../ui-kit/utilities';
 
 import MessageListItem from './MessageListItem';
 import WelcomeMessage from './WelcomeMessage';

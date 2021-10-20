@@ -1,17 +1,12 @@
 import 'emoji-mart/css/emoji-mart.css';
 import { EmojiData, emojiIndex } from 'emoji-mart';
 import React, { useContext, useRef } from 'react';
+import { FlexColumn, ScrollView, StyledBox } from 'react-chat-ui-kit';
+import { Button, Label, LabelSizes, LabelVariants } from 'react-chat-ui-kit';
+import { useClickOutside } from 'react-chat-ui-kit';
+import { useHover } from 'react-chat-ui-kit';
+import { useMediaQuery } from 'react-chat-ui-kit';
 import { ThemeContext } from 'styled-components';
-import { FlexColumn, ScrollView, StyledBox } from 'ui-kit/components/layout';
-import {
-  Button,
-  Label,
-  LabelSizes,
-  LabelVariants,
-} from 'ui-kit/components/presentation';
-import useClickOutside from 'ui-kit/hooks/useClickOutside';
-import useHover from 'ui-kit/hooks/useHover';
-import { useMediaQuery } from 'ui-kit/hooks/useMediaQuery';
 
 type EmojiSuggestionProps = {
   value: string;

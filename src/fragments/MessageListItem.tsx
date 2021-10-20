@@ -1,7 +1,6 @@
 import { Message as ChatKittyMessage, isUserMessage } from 'chatkitty';
 import moment from 'moment';
 import React, { ReactElement } from 'react';
-
 import {
   FlexColumn,
   FlexRow,
@@ -9,8 +8,8 @@ import {
   Label,
   LabelSizes,
   StyledBox,
-} from '../ui-kit/components';
-import useHover from '../ui-kit/hooks/useHover';
+} from 'react-chat-ui-kit';
+import { useHover } from 'react-chat-ui-kit';
 
 import Message from './Message';
 

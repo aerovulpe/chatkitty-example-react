@@ -17,15 +17,15 @@ import ChatKitty, {
   User,
 } from 'chatkitty';
 import React, { ReactElement, useEffect, useState } from 'react';
-
-import ChatKittyConfiguration from '../configuration/chatkitty';
-import { LayoutState, View } from '../navigation';
 import {
   isTextMessageDraft,
   MessageDraft,
   MessageDraftType,
   TextMessageDraft,
-} from '../ui-kit/components';
+} from 'react-chat-ui-kit';
+
+import ChatKittyConfiguration from '../configuration/chatkitty';
+import { LayoutState, View } from '../navigation';
 
 const kitty = ChatKitty.getInstance(ChatKittyConfiguration.API_KEY);
 

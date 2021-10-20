@@ -1,7 +1,4 @@
 import React, { useContext } from 'react';
-import { ThemeContext } from 'styled-components';
-
-import { ChatAppContext } from '../providers/ChatAppProvider';
 import {
   Drawer,
   FlexColumn,
@@ -11,8 +8,12 @@ import {
   Icon,
   Icons,
   StyledBox,
-} from '../ui-kit/components';
-import { useMediaQuery } from '../ui-kit/hooks';
+} from 'react-chat-ui-kit';
+import { useMediaQuery } from 'react-chat-ui-kit';
+import { ThemeContext } from 'styled-components';
+
+import { ReactComponent as Logo } from '../assets/images/logo.svg';
+import { ChatAppContext } from '../providers/ChatAppProvider';
 
 import CurrentUserStatus from './CurrentUserStatus';
 import MyChannels from './MyChannels';
@@ -45,11 +46,7 @@ const Menu: React.FC = () => {
 
       <StyledBox padding={6}>
         <FlexRow>
-          <Icon
-            icon={Icons.Logo}
-            title="ChatKitty"
-            style={{ height: 61, width: 61 }}
-          />
+          <Logo title="ChatKitty" style={{ height: 61, width: 61 }} />
           <StyledBox paddingLeft={4}>
             <FlexColumn minHeight={1}>
               <Heading variant={HeadingVariants.INVERSE}>

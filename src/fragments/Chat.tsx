@@ -1,19 +1,19 @@
 import React, { useContext, useEffect } from 'react';
-
-import { ChatAppContext } from '../providers/ChatAppProvider';
 import {
   FlexColumn,
   Heading,
   HeadingSizes,
   StyledBox,
-} from '../ui-kit/components';
+} from 'react-chat-ui-kit';
+
+import { ChatAppContext } from '../providers/ChatAppProvider';
 
 import ChatHeader from './ChatHeader';
 import ChatMessageInput from './ChatMessageInput';
 import ChatMessages from './ChatMessages';
 
 const Chat: React.FC = () => {
-  const { channel, startChatSession, prependToMessages, showChat } =
+  const { channel, startChatSession, prependToMessages } =
     useContext(ChatAppContext);
 
   useEffect(() => {

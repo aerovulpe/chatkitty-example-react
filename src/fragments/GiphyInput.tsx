@@ -1,22 +1,22 @@
 import { IGif } from '@giphy/js-types';
 import React, { useCallback, useState } from 'react';
-import attribution from 'ui-kit/components/chat/giphy-message/attribution.png';
-
 import {
   Dropdown,
   Icons,
   Input,
   ScrollView,
   StyledBox,
-} from '../ui-kit/components';
+} from 'react-chat-ui-kit';
 import {
   Gif,
   GifSize,
   GiphyMessagePlaceholder,
   giphyMessagePlaceholders,
   typedGiphyMasonry,
-} from '../ui-kit/components/chat';
-import { GetNextPage, useDebounce, usePagination } from '../ui-kit/hooks';
+} from 'react-chat-ui-kit';
+import { GetNextPage, useDebounce, usePagination } from 'react-chat-ui-kit';
+
+import attribution from '../assets/images/giphy-attribution.png';
 
 const GiphyMasonry = typedGiphyMasonry<IGif>();
 

@@ -1,22 +1,16 @@
 import { IGif } from '@giphy/js-types';
 import { Channel } from 'chatkitty';
 import React, { useContext, useRef } from 'react';
-import { ThemeContext } from 'styled-components';
-
-import { ChatAppContext } from '../providers/ChatAppProvider';
-import {
-  FlexRow,
-  Icon,
-  Icons,
-  StyledBox,
-  Textarea,
-} from '../ui-kit/components';
+import { FlexRow, Icon, Icons, StyledBox, Textarea } from 'react-chat-ui-kit';
 import {
   isDraftModified,
   MessageDraftType,
   newTextMessageDraft,
-} from '../ui-kit/components/chat/message-draft/message-draft';
-import { useMediaQuery } from '../ui-kit/hooks';
+} from 'react-chat-ui-kit';
+import { useMediaQuery } from 'react-chat-ui-kit';
+import { ThemeContext } from 'styled-components';
+
+import { ChatAppContext } from '../providers/ChatAppProvider';
 
 import EmojiInput from './EmojiInput';
 import EmojiSuggestion from './EmojiSuggestion';

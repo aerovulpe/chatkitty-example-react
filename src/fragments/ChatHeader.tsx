@@ -1,8 +1,8 @@
 import { Channel } from 'chatkitty';
 import React, { useContext } from 'react';
+import { FlexRow, Icon, Icons, StyledBox, Title } from 'react-chat-ui-kit';
 
 import { ChatAppContext } from '../providers/ChatAppProvider';
-import { FlexRow, Icon, Icons, StyledBox, Title } from '../ui-kit/components';
 
 interface ChatHeaderProps {
   channel: Channel;

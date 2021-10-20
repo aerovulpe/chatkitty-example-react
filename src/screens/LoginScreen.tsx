@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { ThemeContext } from 'styled-components';
 import {
   Button,
   ButtonVariants,
@@ -13,12 +12,13 @@ import {
   Label,
   LabelVariants,
   StyledBox,
-} from 'ui-kit/components';
+} from 'react-chat-ui-kit';
+import { ThemeContext } from 'styled-components';
 
 import image from '../assets/images/background.png';
+import logo from '../assets/images/banner-logo.svg';
 import screenshot from '../assets/images/chat-app-screenshot.png';
 import { ChatAppContext } from '../providers/ChatAppProvider';
-import logo from '../ui-kit/svg/banner-logo.svg';
 
 const LoginScreen: React.FC = () => {
   const theme = useContext(ThemeContext);

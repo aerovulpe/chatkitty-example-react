@@ -1,8 +1,7 @@
 import { Message as ChatKittyMessage, isTextMessage } from 'chatkitty';
 import invariant from 'invariant';
 import React from 'react';
-
-import { TextMessage } from '../ui-kit/components/chat';
+import { TextMessage } from 'react-chat-ui-kit';
 
 type MessageProps = {
   message: ChatKittyMessage;

@@ -1,6 +1,4 @@
 import React, { useContext } from 'react';
-
-import { ChatAppContext } from '../providers/ChatAppProvider';
 import {
   FlexRow,
   Heading,
@@ -9,9 +7,11 @@ import {
   Icons,
   Modal,
   ScrollView,
-} from '../ui-kit/components';
-import { JoinableChannelListItemView } from '../ui-kit/components/chat';
-import { usePaginator } from '../ui-kit/hooks';
+} from 'react-chat-ui-kit';
+import { JoinableChannelListItemView } from 'react-chat-ui-kit';
+import { usePaginator } from 'react-chat-ui-kit';
+
+import { ChatAppContext } from '../providers/ChatAppProvider';
 
 const JoinChannelDialog: React.FC = () => {
   const { layout, hideJoinChannel, joinableChannelsPaginator, joinChannel } =

@@ -9987,6 +9987,17 @@ react-app-polyfill@^2.0.0:
     regenerator-runtime "^0.13.7"
     whatwg-fetch "^3.4.1"
 
+react-chat-ui-kit@^1.0.0-beta.1:
+  version "1.0.0-beta.1"
+  resolved "https://registry.yarnpkg.com/react-chat-ui-kit/-/react-chat-ui-kit-1.0.0-beta.1.tgz#981c46bd601fa93adebaa761affe095492d74ae4"
+  integrity sha512-AeJotZz/b79d+sQ0uFsjBEi97n6ngi5j/mZgTecwTym+ihp+O92sElliyeDzGluLDS1mYi2FhZPs0HrrqhDZGQ==
+  dependencies:
+    "@giphy/js-types" "^4.0.3"
+    framer-motion "^4.1.17"
+    invariant "^2.2.4"
+    styled-components "^5.3.1"
+    styled-system "^5.1.5"
+
 react-dev-utils@^11.0.3:
   version "11.0.4"
   resolved "https://registry.yarnpkg.com/react-dev-utils/-/react-dev-utils-11.0.4.tgz#a7ccb60257a1ca2e0efe7a83e38e6700d17aa37a"

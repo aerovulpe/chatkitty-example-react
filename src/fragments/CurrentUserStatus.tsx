@@ -1,6 +1,4 @@
 import React, { useContext } from 'react';
-
-import { ChatAppContext } from '../providers/ChatAppProvider';
 import {
   FlexRow,
   Icon,
@@ -8,7 +6,9 @@ import {
   Label,
   LabelVariants,
   StyledBox,
-} from '../ui-kit/components';
+} from 'react-chat-ui-kit';
+
+import { ChatAppContext } from '../providers/ChatAppProvider';
 
 const CurrentUserStatus: React.FC = () => {
   const { currentUser, online } = useContext(ChatAppContext);

@@ -1,8 +1,8 @@
 import { Message } from 'chatkitty';
 import React, { useContext } from 'react';
 
+import { ReactComponent as Logo } from '../assets/images/logo.svg';
 import { ChatAppContext } from '../providers/ChatAppProvider';
-import { Icon, Icons } from '../ui-kit/components';
 
 import MessageListItem from './MessageListItem';
 
@@ -35,13 +35,7 @@ const WelcomeMessage: React.FC = () => {
     <MessageListItem
       message={welcomeMessage}
       key={welcomeMessage.id}
-      avatar={
-        <Icon
-          icon={Icons.Logo}
-          title="ChatKitty"
-          style={{ height: 61, width: 61 }}
-        />
-      }
+      avatar={<Logo title="ChatKitty" style={{ height: 61, width: 61 }} />}
     />
   );
 };

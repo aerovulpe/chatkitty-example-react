@@ -1,6 +1,4 @@
 import React, { useContext, useEffect } from 'react';
-
-import { ChatAppContext } from '../providers/ChatAppProvider';
 import {
   FlexRow,
   Heading,
@@ -8,8 +6,10 @@ import {
   Icon,
   Icons,
   ScrollView,
-} from '../ui-kit/components';
-import { usePaginator } from '../ui-kit/hooks';
+} from 'react-chat-ui-kit';
+import { usePaginator } from 'react-chat-ui-kit';
+
+import { ChatAppContext } from '../providers/ChatAppProvider';
 
 import MyChannelListItem from './MyChannelListItem';
 

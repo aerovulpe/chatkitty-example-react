@@ -1,8 +1,8 @@
 import { Channel } from 'chatkitty';
 import React, { useContext, useEffect, useState } from 'react';
+import { JoinedChannelListItemView } from 'react-chat-ui-kit';
 
 import { ChatAppContext } from '../providers/ChatAppProvider';
-import { JoinedChannelListItemView } from '../ui-kit/components/chat/channel/joined-channel-list-item-view';
 
 interface MyChannelListItemProps {
   channel: Channel;
